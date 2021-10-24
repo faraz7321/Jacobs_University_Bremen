@@ -1,0 +1,29 @@
+b.
+
+t = FFLFLFRFRFFLFRF  p = FFLFR
+
+F F L F L F R F R F F L F R F     skip
+f f l f R                          1
+    F F L F R                      0
+      f f l f R                    0
+            f f l f R              2
+              f f L F R            1
+                  F F L F R
+
+alignments used: 6   comparisons made: 16
+
+c. lookup table
+
+   F F L F R
+   0 1 2 3 4
+_________________
+F  - - 0 - 0 
+L  0 1 - 0 1 
+R  0 1 2 3 -  
+P  0 1 2 3 4             
+
+
+
+
+
+

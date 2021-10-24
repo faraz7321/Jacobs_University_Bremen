@@ -1,0 +1,11 @@
+t = FFLFLFRFRFFLFRF, p = FFLFR
+
+F F L F L F R F R F F L F R F     skip
+
+f f l f R                          2
+    f F L F R                      4
+              f f l f R            2
+                  F F L F R
+
+Total alignments used: 4
+Total comparisons performed: 12

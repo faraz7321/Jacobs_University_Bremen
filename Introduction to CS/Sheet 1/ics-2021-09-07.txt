@@ -1,0 +1,57 @@
+* Constructing a maze...
+  
+    S
+  +   +---+---+---+
+  | a | b | c | d |
+  +   +   +---+---+
+  | e   f | g | h |
+  +---+---+---+---+
+  | i | j | k | l |
+  +---+---+---+---+
+  | m | n | o | p |
+  +---+---+---+   +
+                X
+
+0: Initializing
+
+   G = (V, E)
+   V = { a, b, c, d, e, f, g, h, i, j, k, l, m, n ,o, p }
+   
+   E = {}
+
+   A = { {a}, {b}, {c}, {d}, {e}, {f}, {g}, {h}, ... } }
+
+1: Tearing down the "wall" between the "rooms" e and f
+
+   E = { (e,f) }
+   
+   A = { {a}, {b}, {c}, {d}, {e, f}, {g}, {h}, ... } }
+
+2: Tearing down the "wall" between the "rooms" a and e
+
+   E = { (e,f), (a,e) }
+
+   A = { {a, e, f}, {b}, {c}, {d}, {g}, {h}, ... } }
+
+3: Tearing down	the "wall" between the "rooms" b and f
+
+   E = { (e,f), (a,e), (b,f) }
+
+   A = { {a, b, e, f}, {c}, {d}, {g}, {h}, ... } }
+
+4: ...
+   
+* Input option #1
+
+  I = (H, W, S, X) // height, width, start node, exit node
+
+* Input option #2
+
+  I = (G', S, X)   // graph of "room" neighborships, start node, exit node
+
+  G' = (V, N)
+
+  V = { a, b, c, d, e, f, g, h, i, j, k, l, m, n ,o, p }
+  N = { (a,b), (b,c), (c,d), (a,e), ...}
+  S = a
+  X = p

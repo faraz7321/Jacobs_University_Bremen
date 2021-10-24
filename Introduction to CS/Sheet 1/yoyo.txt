@@ -1,0 +1,15 @@
+t = FFLFLFRFRFFLFRF  p = FFLFR
+
+F F L F L F R F R F F L F R F
+F F L F R
+  F F l f r
+    F f l f r
+      F F l f r
+        F f l f r
+          F F l f r
+            F f l f r
+              F F l f r
+                F f l f r
+                  F F L F R 
+
+alignments used: 10   comparisons made: 22
