@@ -1,0 +1,6 @@
+Recurrent neural network is used for NLP (Natural language Processing)
+Convolutional neural network is mainly used for image proccessing
+
+RNN - Sequence models:
+	Sequence modelling problems are solved with RNN
+	
