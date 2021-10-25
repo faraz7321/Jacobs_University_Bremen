@@ -1,0 +1,1 @@
+printf("Removing %d from queue\n", temp);
