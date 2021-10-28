@@ -1,7 +1,13 @@
+/*
+CH-230-A
+a8_p3.c
+Faraz Ahmad
+fahmad@jacobs.university.de
+ */
 /**
  * @file testqueue.c
  */
-#include "queue.c"
+#include "queue.h"
 
 int main()
 {

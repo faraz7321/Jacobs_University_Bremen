@@ -1,3 +1,9 @@
+/*
+CH-230-A
+a8_p3.c
+Faraz Ahmad
+fahmad@jacobs.university.de
+ */
 /**
  * @file queue.c
  */
@@ -84,11 +90,12 @@ void empty_queue(Queue *pq)
 void printq(Queue *pq)
 {
     int n = pq->items;
-
+    Queue temp = *pq;
     printf("content of the queue: ");
     while (n > 0)
     {
-        // printf("%d ", );
+        printf("%d ", temp.front->item);
+        temp.front = temp.front->next;
         n--;
     }
     printf("\n");

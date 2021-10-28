@@ -1,3 +1,9 @@
+/*
+CH-230-A
+queue.c
+Faraz Ahmad
+fahmad@jacobs.university.de
+ */
 /**
  * @file queue.c
  */

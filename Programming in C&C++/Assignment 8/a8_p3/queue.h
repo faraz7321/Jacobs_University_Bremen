@@ -1,3 +1,9 @@
+/*
+CH-230-A
+a8_p3.h
+Faraz Ahmad
+fahmad@jacobs.university.de
+ */
 /**
  * @file queue.h
  */

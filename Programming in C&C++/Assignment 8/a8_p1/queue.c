@@ -1,6 +1,10 @@
-/**
- * @file queue.c
- */
+/*
+CH-230-A
+a8_p1.c
+Faraz Ahmad
+fahmad@jacobs.university.de
+*/
+
 #include "queue.h"
 
 void initialize_queue(Queue *pq)
