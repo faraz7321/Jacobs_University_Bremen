@@ -1,0 +1,37 @@
+a)
+
+E0020	identifier "string" is undefined
+E0020	identifier "cout" is undefined
+E0020	identifier "endl" is undefined
+E0020	identifier "getline" is undefined
+E0020	identifier "cin" is undefined
+
+Using namespace, you can define the context 
+in which names are defined. In essence, a namespace defines a scope.
+
+eg string is a part of std namespace so instead of
+- using namespace std;
+- string xyz = "hello";
+- cout << xyz;
+
++ std::string xyz = "hello"; 
++ std::cout << xyz;
+can be used
+
+b)
+
+E0020	identifier "name" is undefined
+
+name variable is undefined so we need to use Class::method
+to access the class member in a method which is outside of the class.
+If we dont want to write 
+- void Critter::setName(string& newname)
+we can write the method inside the Critter class
++ void setName(string& newname)
+
+if we write
+void setHunger(int newhunger) {
+	Critter::hunger = newhunger;
+}
+this is wrong because we are accessing private member of the class
+
