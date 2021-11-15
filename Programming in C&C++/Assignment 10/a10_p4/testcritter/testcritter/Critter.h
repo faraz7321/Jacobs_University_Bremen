@@ -19,7 +19,7 @@ private: // data members are private
 public: // business logic methods are public
     Critter();
     Critter(string newname);
-    Critter(string name, int newhunger, int newboredom, double newheight);
+    Critter(string name, int newhunger, int newboredom, double newheight=10);
     // setter methods
     void setName(string &newname);
     void setHunger(int newhunger);

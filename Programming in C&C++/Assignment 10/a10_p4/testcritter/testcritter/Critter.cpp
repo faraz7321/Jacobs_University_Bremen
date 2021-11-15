@@ -10,7 +10,7 @@ using namespace std;
 
 Critter::Critter()
 {
-	cout << "creating object of default constructor" << endl;
+	cout << "Creating object with constructor type 1" << endl;
 	name = "default_critter";
 	height = 5;
 	boredom = 0;
@@ -18,7 +18,7 @@ Critter::Critter()
 }
 Critter::Critter(string newname)
 {
-	cout << "creating object of constructor with name as parameter" << endl;
+	cout << "Creating object with constructor type 2" << endl;
 	name = newname;
 	height = 5;
 	boredom = 0;
@@ -26,7 +26,7 @@ Critter::Critter(string newname)
 }
 Critter::Critter(string newname, int newhunger, int newboredom, double newheight)
 {
-	cout << "creating object of constructor with\n"
+	cout << "Creating object of constructor with\n"
 		 << "name, hunger, boredom and height as parameter " << endl;
 	name = newname;
 	hunger = newhunger;
@@ -54,7 +54,7 @@ void Critter::print()
 	cout << "I am " << name << "." << endl
 		 << "My hunger level is " << hunger << "." << endl
 		 << "My height is " << height << "." << endl
-		 << "my boredom level is " << boredom << "." << endl
+		 << "My boredom level is " << boredom << "." << endl
 		 << endl;
 }
 

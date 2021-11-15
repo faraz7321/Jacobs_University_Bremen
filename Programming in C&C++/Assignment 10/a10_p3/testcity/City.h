@@ -31,6 +31,6 @@ public:
 	City();
 	//constructor
 	City(string newname, int newhabitants, string newmayor, double newarea);
-	//print function
+	//print/service function
 	void toString();
 };

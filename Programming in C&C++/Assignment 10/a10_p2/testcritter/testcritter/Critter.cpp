@@ -23,6 +23,7 @@ void Critter::setBoredom(int newboredom)
 	boredom = newboredom;
 }
 
+//getter and setter for new properties
 void Critter::setGrade(char newgrade)
 {
 	grade = newgrade;
