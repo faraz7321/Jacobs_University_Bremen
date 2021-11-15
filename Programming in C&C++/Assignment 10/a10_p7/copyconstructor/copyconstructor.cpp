@@ -4,7 +4,6 @@ copyconstructor.cpp
 Faraz Ahmad
 fahmad@jacobs.university.de
  */
-#pragma warning(disable : 4996)
 #include <iostream>
 #include <cstring> // standard C string.h header file
 
@@ -18,16 +17,16 @@ using namespace std;
 class NaiveString
 {
 private:
-    char* str;
+    char *str;
 
 public:
-    NaiveString(const char*);
-    NaiveString(const NaiveString&);
+    NaiveString(const char *);
+    NaiveString(const NaiveString &);
     void update(char, char);
     void print();
 };
 
-NaiveString::NaiveString(const char* t)
+NaiveString::NaiveString(const char *t)
 {
     cout << "char copy constructor being called\n";
     str = new char[strlen(t) + 1];
@@ -39,7 +38,7 @@ NaiveString::NaiveString(const char* t)
     naive string starting from an existing one
 */
 
-NaiveString::NaiveString(const NaiveString& src)
+NaiveString::NaiveString(const NaiveString &src)
 {
     cout << "object copy constructor being called\n";
     str = new char[strlen(src.str) + 1];
@@ -68,14 +67,14 @@ void funcByVal(NaiveString s)
     s.update('B', 'C');
     s.print();
 }
-void funcByRef(NaiveString& s)
+void funcByRef(NaiveString &s)
 {
     cout << "funcbyRef() being called" << endl;
     s.update('B', 'C');
     s.print();
 }
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     NaiveString a("aBcBdB");
     a.print();
@@ -84,8 +83,8 @@ int main(int argc, char** argv)
     a.print();
 
     cout << endl;
-    //creating an object 
-    NaiveString *b = new  NaiveString("helloBuhCO");
+    //creating an object
+    NaiveString *b = new NaiveString("helloBuhCO");
     cout << "About to call funcbyRef()" << endl;
     funcByRef(*b);
     b->print();
