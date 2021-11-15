@@ -30,6 +30,12 @@ Complex::~Complex()
 {
 }
 
+/**
+ * @brief adds 2 complex numbers
+ * 
+ * @param c 
+ * @return Complex 
+ */
 Complex Complex::add(Complex c)
 {
 	Complex add;
@@ -37,7 +43,12 @@ Complex Complex::add(Complex c)
 	add.imag = imag + c.imag;
 	return add;
 }
-
+/**
+ * @brief subtracts 2 complex numbers
+ * 
+ * @param c 
+ * @return Complex 
+ */
 Complex Complex::sub(Complex c)
 {
 	Complex Sub;
@@ -45,7 +56,12 @@ Complex Complex::sub(Complex c)
 	Sub.imag = imag - c.imag;
 	return Sub;
 }
-
+/**
+ * @brief multiply 2 complex numbers
+ * 
+ * @param c 
+ * @return Complex 
+ */
 Complex Complex::mult(Complex c)
 {
 	Complex mult;
@@ -54,6 +70,12 @@ Complex Complex::mult(Complex c)
 	return mult;
 }
 
+/**
+ * @brief finds conjugate on a complex number
+ * 
+ * @param c 
+ * @return Complex 
+ */
 Complex Complex::conjugate(Complex c)
 {
 	Complex con;
