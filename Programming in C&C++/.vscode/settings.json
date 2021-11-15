@@ -45,6 +45,7 @@
         "xtr1common": "cpp",
         "xutility": "cpp",
         "complex": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "vector": "cpp"
     }
 }
