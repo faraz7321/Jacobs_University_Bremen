@@ -72,6 +72,7 @@ void Dementor::eats()
 Dementor::~Dementor()
 {
 }
+//CHILD CLASS
 class Elf : public Creature
 {
 private:
@@ -114,6 +115,8 @@ int main()
 {
     Creature c;
     c.run();
+
+    //creating creatures
 
     Wizard w;
     w.run();

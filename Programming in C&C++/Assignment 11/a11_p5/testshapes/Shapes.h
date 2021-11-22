@@ -4,97 +4,129 @@ Shapes.h
 Faraz Ahmad
 fahmad@jacobs.university.de
  */
+
 /* 
 	Classic shape examples: an inheritance tree in a geometric context
 */
 #ifndef __SHAPES_H
 #define __SHAPES_H
+#define _USE_MATH_DEFINES
 #include <string>
+#include <math.h>
+using namespace std;
 
-/**
- * @brief PARENT/BASE CLASS
- * 
- */
+//PARENT CLASS
 class Shape
-{                     // base class
-private:              // private access modifier: could also be protected
-    std::string name; // every shape will have a name
+{				 // base class
+private:		 // private access modifier: could also be protected
+	string name; // every shape will have a name
 public:
-    Shape(const std::string &); // builds a shape with a name
-    Shape();                    // empty shape
-    Shape(const Shape &);       // copy constructor
-    void printName() const;     // prints the name
+	//constructors
+	Shape(const string &);
+	Shape();
+	Shape(const Shape &); // copy constructor
+	void printName() const;
+	// prints the name
+	// Getters and setters
+	string getName() const;
+	void setName(string n);
 };
 
-/**
- * @brief inherits from Shape
- * 
- */
+//CHILD CLASS
 class CenteredShape : public Shape
 {
+	// inherits from Shape
 private:
-    double x{}, y{}; // the center of the shape
-public:
-    CenteredShape(const std::string &, double, double); // usual three constructors
-    CenteredShape();
-    CenteredShape(const CenteredShape &);
-    void move(double, double); // moves the shape, i.e. it modifies it center
-};
-
-/**
- * @brief a Circle is a shape with a center and a radius
- * 
- */
-class Circle : public CenteredShape
-{
-private:
-    double Radius{};
+	double x, y; // the center of the shape
 
 public:
-    Circle(const std::string &, double, double, double);
-    Circle();
-    Circle(const Circle &);
+	CenteredShape(const string &, double, double); // usual three constructors
+	CenteredShape();
+	CenteredShape(const CenteredShape &);
+	// Getters and setters
+	double getX() const;
+	double getY() const;
+	void setX(int X);
+	void setY(int Y);
 };
 
-/**
- * @brief a regular polygon is a centered_shape with a number of edge
- * 
- */
+//CHILD CLASS
 class RegularPolygon : public CenteredShape
-{
+{ // a regular polygon is a centered_shape with a number of edges
 private:
-    int EdgesNumber{};
+	int EdgesNumber;
 
 public:
-    RegularPolygon(const std::string &, double, double, int);
-    RegularPolygon();
-    RegularPolygon(const RegularPolygon &);
+	RegularPolygon(const string &, double, double, int);
+	RegularPolygon();
+	RegularPolygon(const RegularPolygon &);
+	// Getters and setters
+	int getEdgesNumber() const;
+	void setEdgesNumber(int n);
 };
 
-/**
- * @brief Rectangle is a regular_polygon
- * 
- */
+//CHILD CLASS
 class Rectangle : public RegularPolygon
 {
+	// a rectangle is a polygon with 4 edges and 2 difference lengths
 private:
-    /* data */
+	double width;
+	double height;
+
 public:
-    Rectangle();
-    ~Rectangle();
+	Rectangle();
+	Rectangle(const string &, double, double, double, double);
+	Rectangle(const Rectangle &);
+
+	// Getters and setters
+	double getWidth();
+	double getHeight();
+	void setWidth(double w);
+	void setHeight(double h);
+	//calculation
+	double perimeter();
+	double area();
 };
 
-/**
- * @brief square is a regular_polygon
- * 
- */
-class Square : public RegularPolygon
+//CHILD CLASS
+class Square : public Rectangle
 {
+	// A square is a rectangle, but with only 1 length
 private:
-    /* data */
+	double side;
+
 public:
-    Square();
-    ~Square();
+	Square();
+	Square(const string &, double, double, double);
+	Square(const Square &);
+
+	// Getters and setters
+	double getSide();
+	void setSide(double s);
+
+	//calculation
+	double perimeter();
+	double area();
+};
+
+//CHILD CLASS
+class Circle : public CenteredShape
+{
+	// a Circle is a shape with a center and a radius
+private:
+	double Radius;
+
+public:
+	Circle(const string &, double, double, double);
+	Circle();
+	Circle(const Circle &);
+
+	// Getters and setters
+	double getRadius() const;
+	void setRadius(double r);
+	//calculation
+	double perimeter();
+	double area();
 };
 
 #endif
