@@ -11,6 +11,7 @@ fahmad@jacobs.university.de
 #ifndef __SHAPES_H
 #define __SHAPES_H
 #include <string>
+using namespace std;
 
 class Shape
 {					  // base class
@@ -54,6 +55,31 @@ public:
 	Circle(const std::string &, double, double, double);
 	Circle();
 	Circle(const Circle &);
+};
+
+class Hexagon : RegularPolygon
+{
+private:
+	int side{};
+	string color;
+
+public:
+	//constructor
+	Hexagon();
+	Hexagon(const Hexagon &);
+	Hexagon(int newside, string newcolor);
+	//destructor
+	~Hexagon();
+	//getter and setter methods
+	int getSide();
+	void setSide(int newside);
+	string getColor();
+	void setColor(string newcolor);
+	//calculation methods
+	double perimeter();
+	double area();
+	//service method
+	void toString();
 };
 
 #endif
