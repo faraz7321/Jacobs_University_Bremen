@@ -10,20 +10,16 @@ using namespace std;
 class TournamentMember
 {
 private:
-	char firstName[36];
-	char lastName[36];
-	char dob[11];
+	char *firstName = new char[36];
+	char *lastName = new char[36];
+	char *dob = new char[11];
 	int memberID;
-	enum gender
-	{
-		MALE,
-		FEMALE,
-		DIVERSE
-	};
+	string gender;
 
 public:
 	static string location;
 	TournamentMember();
+	TournamentMember(string fn, string ln, string dob, string gender, string nloc);
 	~TournamentMember();
 	//getter and setter methods
 	string getName();
@@ -34,7 +30,8 @@ public:
 	string getDob();
 	void setDob(string ndob);
 	int getMemberId();
+	void setGender(string newgender);
 	//service method
-	string toString();
-	string getStringFromEnum(gender e);
+	void toString();
+	string getGender();
 };

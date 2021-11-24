@@ -6,27 +6,36 @@ fahmad@jacobs.university.de
  */
 #include "TournamentMember.h"
 #include <string>
+#include <cstdlib>
 TournamentMember::TournamentMember()
 {
+    cout << "Default constructor" << endl;
+    memberID = 0;
 }
 
 TournamentMember::~TournamentMember()
 {
+    cout << "Destructor called" << endl;
+    delete[] firstName;
+    delete[] lastName;
+    delete[] dob;
 }
-string TournamentMember::getStringFromEnum(gender e)
+TournamentMember::TournamentMember(string fn, string ln, string ndob, string ngender, string nloc)
 {
-    switch (e)
-    {
-
-    case MALE:
-        return "Male";
-    case FEMALE:
-        return "Female";
-    case DIVERSE:
-        return "Diverse";
-    default:
-        cout << "Bad MyEnum";
-    }
+    cout << "Parameterized constructor called" << endl;
+    setFirstName(fn);
+    setLastName(ln);
+    setDob(ndob);
+    memberID = rand() % 1000 + 1;
+    gender = ngender;
+}
+string TournamentMember::getGender()
+{
+    return gender;
+}
+void TournamentMember::setGender(string newgender)
+{
+    gender = newgender;
 }
 //getter and setter methods
 string TournamentMember::getName()
@@ -36,30 +45,44 @@ string TournamentMember::getName()
 }
 string TournamentMember::getFirstName()
 {
+    // string fn;
+    // for (int i = 0; i < 36; i++)
+    // {
+    //     if (firstName[i] != '\0')
+    //     {
+    //         fn += firstName[i];
+    //     }
+    // }
+    //return fn;
     return firstName;
 }
 void TournamentMember::setFirstName(string fn)
 {
-    if (fn.length() <= 36)
+    int len = fn.length();
+    for (int i = 0; i < len; i++)
     {
-        for (int i = 0; i < fn.length(); i++)
-        {
-            firstName[i] = fn[i];
-        }
+        firstName[i] = fn[i];
     }
 }
 string TournamentMember::getLastName()
 {
+    // string fn;
+    // for (int i = 0; i < 36; i++)
+    // {
+    //     if (lastName[i] != '\0')
+    //     {
+    //         fn += lastName[i];
+    //     }
+    // }
+    // return fn;
     return lastName;
 }
 void TournamentMember::setLastName(string ln)
 {
-    if (ln.length() <= 36)
+    int len = ln.length();
+    for (int i = 0; i < len; i++)
     {
-        for (int i = 0; i < ln.length(); i++)
-        {
-            lastName[i] = ln[i];
-        }
+        lastName[i] = ln[i];
     }
 }
 string TournamentMember::getDob()
@@ -68,18 +91,25 @@ string TournamentMember::getDob()
 }
 void TournamentMember::setDob(string ndob)
 {
-    if (ndob.length() <= 36)
+    for (int i = 0; i < 11; i++)
     {
-        for (int i = 0; i < ndob.length(); i++)
-        {
-            dob[i] = ndob[i];
-        }
+        dob[i] = ndob[i];
     }
 }
+
 int TournamentMember::getMemberId()
 {
+    return memberID;
 }
+
 //service method
-string TournamentMember::toString()
+void TournamentMember::toString()
 {
+
+    cout << "Name: " << getName() << endl
+         << "Date of Birth: " << dob << endl
+         << "Gender: " << gender << endl
+         << "Member ID: " << memberID << endl
+         //<< "Team location: " << location << endl
+         << endl;
 }
