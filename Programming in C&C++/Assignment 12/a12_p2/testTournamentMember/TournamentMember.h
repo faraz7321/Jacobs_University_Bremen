@@ -15,22 +15,23 @@ private:
 	char *dob = new char[11];
 	int memberID;
 	string gender;
+	static string location;
 
 public:
-	static string location;
 	TournamentMember();
-	TournamentMember(string fn, string ln, string dob, string gender, string nloc);
+	TournamentMember(TournamentMember &);
+	TournamentMember(char *fn, char *ln, char *dob, string ngender);
 	~TournamentMember();
-	//getter and setter methods
-	string getName();
-	string getFirstName();
-	void setFirstName(string fn);
-	string getLastName();
-	void setLastName(string ln);
-	string getDob();
-	void setDob(string ndob);
-	int getMemberId();
-	void setGender(string newgender);
+	//inline getter and setter methods
+	inline string getFirstName() const { return firstName; }
+	inline void setFirstName(char *fn) { firstName = fn; }
+	inline string getLastName() const { return lastName; }
+	inline void setLastName(char *ln) { lastName = ln; }
+	inline string getDob() const { return dob; }
+	inline void setDob(char *ndob) { dob = ndob; }
+	inline int getMemberId() const { return memberID; }
+	inline void setGender(string newgender) { gender = newgender; }
+	inline static void setLocation(string loc) { location = loc; }
 	//service method
 	void toString();
 	string getGender();

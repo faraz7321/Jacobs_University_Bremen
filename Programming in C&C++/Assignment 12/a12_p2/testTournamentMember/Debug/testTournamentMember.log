@@ -1,3 +1,2 @@
-﻿  testTournamentMember.cpp
-TournamentMember.obj : error LNK2001: unresolved external symbol "public: static class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > TournamentMember::location" (?location@TournamentMember@@2V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@A)
-D:\Jacobs University Bremen (CS)\Programming in C&C++\Assignment 12\a12_p2\testTournamentMember\Debug\testTournamentMember.exe : fatal error LNK1120: 1 unresolved externals
+﻿  TournamentMember.cpp
+  testTournamentMember.vcxproj -> D:\Jacobs University Bremen (CS)\Programming in C&C++\Assignment 12\a12_p2\testTournamentMember\Debug\testTournamentMember.exe
