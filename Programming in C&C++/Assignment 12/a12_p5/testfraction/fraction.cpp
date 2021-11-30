@@ -6,6 +6,7 @@ fahmad@jacobs.university.de
  */
 #include <iostream>
 #include <sstream>
+#include <cmath>
 #include "fraction.h"
 
 /**
@@ -39,7 +40,7 @@ Fraction::Fraction(int n, int d)
  */
 int Fraction::gcd(int a, int b)
 {
-    int tmp_gcd = 1;
+    //int tmp_gcd = 1;
 
     a = (a < 0) ? -a : a;
     b = (b < 0) ? -b : b;
@@ -72,18 +73,35 @@ int Fraction::lcm(int a, int b)
         return a * b / gcd(a, b);
     }
 }
-
+/**
+ * @brief 
+ * 
+ */
 void Fraction::print()
 {
     std::cout << num << "/" << den << std::endl;
 }
 //operator overloading
+/**
+ * @brief << operator overloaded
+ * 
+ * @param out 
+ * @param f 
+ * @return ostream& 
+ */
 ostream &operator<<(ostream &out, const Fraction &f)
 {
     out << f.num << "/" << f.den << endl;
 
     return out;
 }
+/**
+ * @brief >> operator overloaded
+ * 
+ * @param in 
+ * @param f 
+ * @return istream& 
+ */
 istream &operator>>(istream &in, Fraction &f)
 {
     cout << "Enter the numerator: ";
@@ -93,6 +111,13 @@ istream &operator>>(istream &in, Fraction &f)
 
     return in;
 }
+/**
+ * @brief multiplication
+ * 
+ * @param f1 
+ * @param f2 
+ * @return Fraction 
+ */
 Fraction operator*(Fraction f1, Fraction f2)
 {
     int n = f1.num * f2.num;
@@ -100,7 +125,13 @@ Fraction operator*(Fraction f1, Fraction f2)
 
     return Fraction(n, d);
 }
-
+/**
+ * @brief division
+ * 
+ * @param f1 
+ * @param f2 
+ * @return Fraction 
+ */
 Fraction operator/(Fraction f1, Fraction f2)
 {
     int n = f1.num * f2.den;
@@ -108,6 +139,13 @@ Fraction operator/(Fraction f1, Fraction f2)
 
     return Fraction(n, d);
 }
+/**
+ * @brief addition
+ * 
+ * @param f1 
+ * @param f2 
+ * @return Fraction 
+ */
 Fraction operator+(const Fraction &f1, const Fraction &f2)
 {
     int n = f1.num * f2.den + f2.num * f1.den;
@@ -115,7 +153,13 @@ Fraction operator+(const Fraction &f1, const Fraction &f2)
 
     return Fraction(n, d);
 }
-
+/**
+ * @brief subtraction
+ * 
+ * @param f1 
+ * @param f2 
+ * @return Fraction 
+ */
 Fraction operator-(const Fraction &f1, const Fraction &f2)
 {
     int n = f1.num * f2.den - f2.num * f1.den;
@@ -123,6 +167,14 @@ Fraction operator-(const Fraction &f1, const Fraction &f2)
 
     return Fraction(n, d);
 }
+/**
+ * @brief greater or less than operator
+ * overloading
+ * 
+ * @param f 
+ * @return true 
+ * @return false 
+ */
 bool Fraction::operator>(const Fraction &f)
 {
     bool flag;
@@ -139,6 +191,14 @@ bool Fraction::operator>(const Fraction &f)
 
     return flag;
 }
+/**
+ * @brief greater or less than operator
+ * overloading
+ * 
+ * @param f 
+ * @return true 
+ * @return false 
+ */
 bool Fraction::operator<(const Fraction &f)
 {
     bool flag = false;
@@ -152,5 +212,20 @@ bool Fraction::operator<(const Fraction &f)
         flag = false;
     }
 
+    return flag;
+}
+/**
+ * @brief equal = operator overloaded
+ * 
+ * @param f1 
+ * @return true 
+ * @return false 
+ */
+bool Fraction::operator=(const Fraction &f1)
+{
+    bool flag = false;
+    num = f1.num;
+    den = f1.den;
+    flag = true;
     return flag;
 }

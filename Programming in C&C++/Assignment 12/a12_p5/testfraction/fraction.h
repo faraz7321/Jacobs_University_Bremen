@@ -36,7 +36,7 @@ public:
     friend Fraction operator-(const Fraction &f1, const Fraction &f2);
     bool operator>(const Fraction &f);
     bool operator<(const Fraction &f);
-    Fraction &operator=(const Fraction &f1);
+    bool operator=(const Fraction &f1);
 };
 
 #endif /* FRACTION_H_ */

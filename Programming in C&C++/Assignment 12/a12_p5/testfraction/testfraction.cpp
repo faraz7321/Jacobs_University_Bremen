@@ -29,9 +29,11 @@ int main(void)
         cout << "Both fractions are equal";
     }
     cout << endl;
+    //calculating sum
     Fraction sum = a + b;
     cout << "a + b = " << sum;
+    //calculating difference
     Fraction diff = a - b;
-    cout << "a - c = " << diff;
+    cout << "a - b = " << diff;
     return 0;
 }
