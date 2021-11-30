@@ -8,17 +8,31 @@ fahmad@jacobs.university.de
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <vector>
 using namespace std;
 int main()
 {
-    string filename, line;
+    string input, line, fileName, fileExt;
     ifstream fin;  //input file
     ofstream fout; //output file
 
     cout << "Enter filename: ";
-    getline(cin, filename, '.');
+    getline(cin, input);
 
-    fin.open(filename + ".txt");
+    //splitting string into file name and its extention
+    vector<string> v;
+    stringstream ss(input);
+
+    while (ss.good())
+    {
+        string substr;
+        getline(ss, substr, '.');
+        v.push_back(substr);
+    }
+    fileName = v[0];
+    fileExt = "." + v[1];
+
+    fin.open(input);
 
     if (!fin.is_open())
     {
@@ -26,7 +40,7 @@ int main()
         return 0;
     }
 
-    fout.open(filename + "_copy" + ".txt");
+    fout.open(fileName + "_copy" + fileExt);
     if (!fout.is_open())
     {
         cout << "error opening file" << endl;
