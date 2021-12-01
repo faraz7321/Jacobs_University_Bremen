@@ -1,9 +1,0 @@
-﻿  Circle.cpp
-D:\Jacobs University Bremen (CS)\Programming in C&C++\Assignment 12\a12_p7\testvirtual\Circle.cpp(11,1): error C2512: 'Area': no appropriate default constructor available
-D:\Jacobs University Bremen (CS)\Programming in C&C++\Assignment 12\a12_p7\testvirtual\Area.h(4,7): message : see declaration of 'Area'
-  Rectangle.cpp
-D:\Jacobs University Bremen (CS)\Programming in C&C++\Assignment 12\a12_p7\testvirtual\Rectangle.cpp(15,1): error C2512: 'Area': no appropriate default constructor available
-D:\Jacobs University Bremen (CS)\Programming in C&C++\Assignment 12\a12_p7\testvirtual\Area.h(4,7): message : see declaration of 'Area'
-  testvirtual.cpp
-D:\Jacobs University Bremen (CS)\Programming in C&C++\Assignment 12\a12_p7\testvirtual\testvirtual.cpp(37,9): warning C4101: 'randomNumber': unreferenced local variable
-  Generating Code...

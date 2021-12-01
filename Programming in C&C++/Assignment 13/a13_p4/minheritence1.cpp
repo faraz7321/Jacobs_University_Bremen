@@ -29,6 +29,6 @@ class D : public B, public C
 int main()
 {
     D d;
-    d.print();
+    d.print(); // error: request for member 'print' is ambiguous
     return 0;
 }
