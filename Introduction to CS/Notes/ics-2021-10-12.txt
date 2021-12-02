@@ -1,0 +1,75 @@
+* Diet rules
+
+  1. If you don't take beer, you must have fish.
+  2. If you have both beer and fish, don't have ice cream.
+  3. If you have ice cream or don't have beer, then don't have fish.
+
+** Boolean variables
+
+   B : we have beer
+   F : we have fish
+   I : we have ice cream
+
+** Formalization
+
+   1. ¬B → F
+   2. (B ∧ F) → ¬I
+   3. (I ∨ ¬B) → ¬F
+
+   Assuming that 1., 2., and 3. and most hold together, we get:
+
+   (¬B → F) ∧ ((B ∧ F) → ¬I) ∧ ((I ∨ ¬B) → ¬F)
+
+** Simplification
+
+   | B | F | I | ¬B | ¬B → F | ... |
+   |---+---+---+----+--------+-----|
+   | 0 | 0 | 0 |  1 |      0 |     |
+   | 0 | 0 | 1 |  1 |      0 |     |
+   | 0 | 1 | 0 |  1 |      1 |     |
+   | 0 | 1 | 1 |  1 |      1 |     |
+   | 1 | 0 | 0 |  0 |      1 |     |
+   | 1 | 0 | 1 |  0 |      1 |     |
+   | 1 | 1 | 0 |  0 |      1 |     |
+   | 1 | 1 | 1 |  0 |      1 |     |
+
+* Equivalences
+
+  X → Y = ¬X ∨ Y
+
+  X ⟷ Y = (X ∧ Y) ∨ (¬X ∧ ¬Y)
+
+  X ⊕ Y = (X ∧ ¬Y) ∨ (¬X ∧ Y)
+
+  X ↑ Y = ¬(X ∧ Y)
+
+  X ↓ Y = ¬(X ∨ Y)
+
+* Exclusive or example
+
+  0x42 ⊕ 0xba = 0b01000010 ⊕ 0b10111010 = 0b11111000 = 0xf8
+  0xf8 ⊕ 0xba = 0b11111000 ⊕ 0b10111010 = 0b01000010 = 0x42
+
+* Notes
+
+  Our definitions do not really tell us what X ∨ Y ∨ Z means, this is
+  formally not a syntactically correct formula. We can actually read
+  this in two ways if we add parenthesis to make this syntactically
+  correct:
+
+   1: ((X ∨ Y) ∨ Z)
+   2: (X ∨ (Y ∨ Z))
+
+  Lets see whether these two possible ways of adding parenthesis
+  resolve to the same function:
+
+  | X | Y | Z | (X ∨ Y) | ((X ∨ Y) ∨ Z) | (Y ∨ Z) | (X ∨ (Y ∨ Z)) |
+  |---+---+---+---------+---------------+---------+---------------|
+  | 0 | 0 | 0 |       0 |             0 |       0 |             0 |
+  | 0 | 0 | 1 |       0 |             1 |       1 |             1 |
+  | 0 | 1 | 0 |       1 |             1 |       1 |             1 |
+  | 0 | 1 | 1 |       1 |             1 |       1 |             1 |
+  | 1 | 0 | 0 |       1 |             1 |       0 |             1 |
+  | 1 | 0 | 1 |       1 |             1 |       1 |             1 |
+  | 1 | 1 | 0 |       1 |             1 |       1 |             1 |
+  | 1 | 1 | 1 |       1 |             1 |       1 |             1 |

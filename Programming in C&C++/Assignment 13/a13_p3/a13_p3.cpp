@@ -54,6 +54,8 @@ int main()
         }
         fin[i].close();
     }
+    delete fileNames;
+    delete fin;
     cout << "Successfully wrote to file!" << endl;
     fout.close();
     return 0;

@@ -1,0 +1,27 @@
+* Agenda [4/4]
+
+  - [X] Operating System Kernel Abstractions
+  - [X] Homework Point Distribution after 9/12
+  - [X] Sorting Algorithms
+  - [X] Typeclasses
+
+
+* Sorting algorithm idea:
+
+  - an empty list is sorted (base case)
+  - a list with a single element is sorted (convenient second base case)
+  - otherwise
+    - pick the head element
+    - get all elements of the tail less than the head element
+    - get all elements of the tail larger than the head element
+    - return (sort smaller) ++ head ++ (sort bigger)
+
+- Example evaluation
+
+  sort [5,1,3,8,7,2,6]
+   = sort [1,3,2] ++ [5] ++ [8,7,6]
+   = sort [] ++ [1] ++ sort [3,2] ++ [5] ++ sort [7,6] ++ [8] ++ []
+   = [] ++ [1] ++ sort [2] ++ [3] ++ sort [] ++ [5] ++ sort [6] ++ [7] ++ [8] ++ []
+   = [] ++ [1] ++ [2] ++ [3] ++ [] ++ [5] ++ [6] ++ [7] ++ [8] ++ []
+   = [1,2,3,5,6,7,8]
+  

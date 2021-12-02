@@ -1,0 +1,82 @@
+* Tautology, contradiction, satisfiable
+
+  Determine whether the following formulas are a tautology, a
+  contradiction or satisfiable.
+  
+  a)   X → (X ∨ Y)                      substitute implication
+     = ¬X ∨ (X ∨ Y)                     associativity
+     = (¬X ∨ X) ∨ Y                     complementation
+     = 1 ∨ Y                            domination
+     = 1
+
+     The formula is a tautology (since it is always true).
+  
+  b)   X ∨ (¬X ∧ Y)                     distributivity
+     = (X ∨ ¬X) ∧ (X ∨ Y)               complementation
+     = 1 ∧ (X ∨ Y)                      identity
+     = X ∨ Y
+
+     The formula is satisfiable (if X or Y is true).
+  
+  c)   (X ∨ (X ∧ Y)) ∧ ¬X               distributivity
+     = ((X ∨ X) ∧ (X ∨ Y)) ∧ ¬X         idempotency
+     = (X ∧ (X ∨ Y)) ∧ ¬X               associativity and commutativity
+     = (X ∧ ¬X) ∧ (X ∨ Y)               complementation
+     = 0 ∧ (X ∨ Y)                      domination
+     = 0
+
+     The formula is a contradiction (since it is always false).
+
+* Minterms and maxterms
+
+  F(X,Y,Z) = (¬X ∧ Y ∧ Z) ∨ (X ∧ Y ∧ ¬Z) ∨ (X ∧ ¬Y ∧ Z)         DNF
+               0   1   1     1   1    0     1    0   1
+               m_3        +  m_6         +  m_5
+           = m_3 + m_5 + m_6
+
+  G(X,Y,Z) = (¬X ∨ Y ∨ Z) ∧ (X ∨ Y ∨ ¬Z) ∧ (X ∨ ¬Y ∨ Z)         CNF
+               1   0   0     0   0    1     0    1   0
+               M_4        *  M_1         *  M_2
+           = M_1 * M_2 * M_4
+
+* Example
+
+  F(A,B,C) = (A ∧ ¬B) ∨ C
+
+  Lets obtain the CNF and the DNF
+
+  | A | B | C | (A ∧ ¬B) | (A ∧ ¬B) ∨ C |
+  |---+---+---+----------+--------------|
+  | 0 | 0 | 0 |        0 |            0 |
+  | 0 | 0 | 1 |        0 |            1 |
+  | 0 | 1 | 0 |        0 |            0 |
+  | 0 | 1 | 1 |        0 |            1 |
+  | 1 | 0 | 0 |        1 |            1 |
+  | 1 | 0 | 1 |        1 |            1 |
+  | 1 | 1 | 0 |        0 |            0 |
+  | 1 | 1 | 1 |        0 |            1 |
+
+  F(A,B,C) = m_1 + m_3 + m_4 + m_5 + m_7        DNF   cost = 5*2 + 4 = 14
+           = M_0 * M_2 * M_6                    CNF   cost = 3*2 + 2 = 8
+
+  cost(F) = 8 ?
+
+  G(A,B,C) = M_1 * M_2 * M_3 * M_5              CNF   cost = 4*2 + 3 = 11
+           = m_0 + m_4 + m_6 + m_7              DNF   cost = 4*2 + 3 = 11
+           
+  cost(G) = 11 ?
+
+  H(A,B,C) = m_0                                DNF   cost = 1*2 + 0 = 2
+           = M_1 * M_2 * ... * M_7              CNF   cost = 7*2 + 6 = 20
+           
+  cost(H) = 2 ?
+
+  For a DNF expression depending on n variables with m minterms, the
+  cost of the expression is given by m * (n-1) + (m-1).
+
+  For a CNF expression depending on n variables with m maxterms, the
+  cost of the expression is given by m * (n-1) + (m-1).
+
+  Hence, for every DNF or CNF expression, we can easily obtain its
+  costs. Lets see whether we can simplify these expressions to
+  eliminate "redundant" operations...

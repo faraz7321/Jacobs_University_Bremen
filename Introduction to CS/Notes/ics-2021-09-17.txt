@@ -1,0 +1,105 @@
+* Example proof by contra-positive
+
+  Theorem: Let x be an element of ℤ. If x^2 - 6x + 5 is even, then x is
+           odd.
+
+  Formalization:  ∀ x ∈ ℤ.even(x^2 - 6x + 5) ⇒ odd(x)
+
+  Proof: The contra-positive of the proposition is the following:
+
+           ∀ x ∈ ℤ.even(x) ⇒ odd(x^2 - 6x + 5)
+
+         Since x is even, there exists a k ∈ ℤ such that 2k = x.
+         Substituting x, we get:
+
+           x^2 - 6x + 5 = (2k)^2 - 6(2k) + 5
+                        = 4k^2 - 12k + 5
+                        = 4k^2 - 12k + 4 + 1
+                        = 2(2k^2 - 6k + 2) + 1
+
+         Since the first term is even, the sum must be odd.
+
+* Example proof of if and only if using two implications
+
+  Theorem: n - 5 is odd if and only if 3n + 2 is even
+
+  Formalization:   ∀ n ∈ ℤ.odd(n - 5) ⇔ even(3n + 2)
+
+  Proof: First, we show that if n - 5 is odd, then 3n + 2 is even.
+         Since n - 5 = (n - 4) - 1 is odd, we know that n - 4 is
+         even. This implies that n must be an even number. Lets write
+         n as 2k for some k in ℤ. Now we get
+
+           3n + 2 = 3(2k) + 2
+                  = 2 (3k + 1)
+
+         which obviously is even.
+
+         Next, we show that if 3n + 2 is even, then n - 5 is odd.
+         Since we add add an even number to 3n, it follows that 3n
+         must be even. Since 3 is odd, n must be equal to 2k for some
+         k in ℤ. This gives us
+
+           n - 5 = 2k - 5
+                 = 2(k - 2) - 1
+
+         which is odd.
+
+* Example proof by contradiction
+
+  Theorem: There is no smallest rational number greater than 0.
+
+  Proof: We assume that r is the smallest rational number greater than
+         0. Then r/2 is also a rational number and r/2 < r, which
+         contradicts that r is the smallest rational number.
+
+* Example proof by induction
+
+  Lets define an ancestor tree of a person inductively.
+
+  (1) In the simplest case, an ancestor tree is one person.
+
+  (2) In the general case, an ancestor tree shows a person connected
+      to two parents, with each parent having an ancestor tree.
+
+  Theorem: Let n denote the number of persons in an ancestor tree. An
+           ancestor tree extending over g generations shows at most
+           2^g - 1 persons, i.e., n ≤ 2^g - 1.
+
+  Proof: We proof the theorem by induction.
+
+  - Base case:
+
+    We consider a person with no knowledge about his/her parents. In
+    this case, we have g = 1 and n = 1. We have to check whether the
+    inequality n ≤ 2^g - 1 holds:
+
+      1 = n ≤ 2^g - 1 = 2^1 - 1 = 2 - 1 = 1
+
+    This shows that the inequality holds for an ancestor tree with a
+    single person.
+
+  - Induction step:
+
+    We consider a person with two parents and the two ancestor trees
+    of the parents cover g and h generations. Let m = max(g,h) be the
+    maximum of the generations of the two ancestor trees.
+
+    The ancestor tree of our person covers m+1 generations and we can
+    assume (due to the induction hypothesis) that every parent's tree
+    has at most 2^m - 1 persons.
+
+    With this, we get for the tree covering m+1 generations:
+
+    n = (2^g - 1) + (2^h - 1) + 1 ≤ (2^m - 1) + (2^m - 1) + 1
+                                  = 2(2^m - 1) + 1
+                                  = 2^(m+1) - 2 + 1
+                                  = 2^(m+1) - 1
+
+    It follows by induction, that the claim is true for arbitrary
+    ancestor trees.
+
+* Hint for working out induction steps: It is often useful to work out
+  how the result you need to get at looks like. In our case, we need
+  to arrive at n ≤ 2^(m+1) - 1. Knowing the goal sometimes makes it
+  easier to find a way to get there.

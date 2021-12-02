@@ -1,0 +1,35 @@
+* Overview
+
+  The graph defined below defines the relation of concepts we have
+  discussed in class meetings...
+
+  digraph math {
+
+      edge [label=" is-a"];
+
+      "relation" -> "cartesian product" [label=" subset-of",style="dashed"];
+
+      "binary relation" -> "relation";
+      "unary relation" -> "relation";
+      "k-ary relation (k>2)" -> "relation";
+
+      "equivalence relation" -> "binary relation";
+      "partial order relation" -> "binary relation";
+      "strict partial order relation" -> "binary relation";
+
+      "linear order relation" -> "partial order relation";
+
+      "function" -> "binary relation";
+      "partial function" -> "function";
+      "total function" -> "function";
+
+      "injective function" -> "function";
+      "surjective function" -> "function";
+      "bijective function" -> "function";
+  }
+
+* Examples
+
+  a, b \in N:   a = b   (a,b) \in =     equivalence relation
+                a < b   (a,b) \in <     strict partial order
+                a <= b  (a,b) \in <=    partial order

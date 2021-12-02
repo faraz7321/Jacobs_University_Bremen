@@ -1,0 +1,76 @@
+* Calculate 125-123 using a 6-digit ternary number system (base b = 3)
+
+  (1) 125_10 -> 011122_3
+
+      125 mod 3 = 2                     2
+       41 mod 3 = 2                    22
+       13 mod 3 = 1                   122
+        4 mod 3 = 1                  1122
+        1 mod 3 = 1                 11122
+
+  (2) 123_10 -> 011120_3
+
+     -123_10 -> 211102_3
+              + 000001_3
+              ----------
+                211110_3 (b complement)
+
+  (3) 125_10 + (-123_10) in base b = 3:
+
+        011122_3
+      + 211110_3
+      ----------
+        000002_3 -> 2_10
+
+* Representation of 12.34 as a floating point number:
+
+   ... 10^3 10^2 10^1 10^0   10^-1 10^-2 10^-3 ...
+                  1    2   .  3     4
+                       1   .  2     3     4            x 10^1  (normalized)
+
+
+   ...  2^3  2^2  2^1  2^0   2^-1 2^-2 2^-3 2^-4 ...
+         1    1    0    0  .   0   1    0    1   ...
+
+                        1  .   1   0    0    0    1     0    1   ...  x 2^3
+
+   Conversion of the decimal integer part (12) into a binary integer:
+
+   12 = 1100_2
+
+   Conversion of the decimal fraction part (.34) into a binary fraction:
+
+   0.34 * 2 = 0.68                      0
+   0.68 * 2 = 1.36                      01
+   0.36 * 2 = 0.72                      010
+   0.72 * 2 = 1.44                      0101
+   0.44 * 2 = 0.88                      01010
+   0.88 * 2 = 1.76                      010101
+   0.76 * 2 = 1.52                      0101011
+   0.52 * 2 = 1.04                      01010111
+   0.04 * 2 = 0.08                      010101110
+   ...                                  ...
+
+   Putting the integer and fractional parts together, we get:
+
+   1.1000101011110... x 2^3
+
+   The biased exponent is 3+127 = 130 = 10000010_2. Dropping the and
+   putting things together, we obtain:
+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |0|1 0 0 0 0 0 1 0|1 0 0 0 1 0 1 0 1 1 1 0 ...                  |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+* Floating point number comparisons are dangerous (C code):
+
+  {
+    double d;
+
+    for (d = 0; d != 1; d += 0.1 } {    /* d may never be equal to 1 ! */
+      ...
+    }
+  }
+  

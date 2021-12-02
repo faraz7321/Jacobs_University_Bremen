@@ -1,0 +1,48 @@
+* Review injective, surjective, bijective, partial / total functions
+
+  digraph R1 {    digraph R2 {    digraph R3 {    digraph R4 {    digraph R5 {
+    a1 -> b1        a1 -> b2        a1 -> b2        a1 -> b2        a1 -> b2
+    a1 -> b2        a2 -> b1        a2 -> b1        a2 -> b1        a2 -> b1
+    a2 -> b3        a3 -> b3        a3 -> b3        a3 -> b3        a3 -> b5
+    a3 -> b4        a4 -> b3        a4 -> b4        a4 -> b3        a4 -> b3
+  }                 a5 -> b4              b5        a5 -> b4        a5 -> b4
+                          b5      }               }               }
+                  }
+
+  What are the domain, codomain, range and image of the relations?
+  Which ones are functions and which ones are injective, surjective or
+  bijective?
+
+  A3 = {a1,a2,a3}, A4 = {a1,a2,a3,a4}, A5 = {a1,a2,a3,a4,a5}
+  B4 = {b1,b2,b3,b4}, B5 = {b1,b2,b3,b4,b5}
+
+ |    | domain | codomain | range | image | func | injec | surjec | bijec |
+ |----+--------+----------+-------+-------+------+-------+--------+-------|
+ | R1 | A3     | B4       | A3    | B4    | -    | -     | -      | -     |
+ | R2 | A5     | B5       | A5    | B4    | +    | -     | -      | -     |
+ | R3 | A4     | B5       | A4    | B4    | +    | +     | -      | -     |
+ | R4 | A5     | B4       | A5    | B4    | +    | -     | +      | -     |
+ | R5 | A5     | B5       | A5    | B5    | +    | +     | +      | +     |
+ |----+--------+----------+-------+-------+------+-------+--------+-------|
+
+  - R1 is not a function since a1 maps to two elements in B.
+
+  - R2 is a function since every element in A maps to at most one
+    element in B (but R2 is neither injective nor surjective).
+
+  - R3 is a function and every element in B is mapped to by at most
+    one element in A, hence R3 is an injective function.
+
+  - R4 is a function and every element in B is mapped to by at least
+    one element in A, hence R4 is a sujective function.
+
+  - R5 is a function and every element in B is mapped to by at most
+    one element in A and every element in B is mapped to by at least
+    one element in A, hence R5 is injective and surjective and thus
+    bijective.
+
+  - All functions R2,...,R5 are total since every element in A maps to
+    an element in B. If you add additional elements to the domain or
+    codomain that do not participate in the relation, then function
+    properties change. Hence, it is crucial to be explicit about the
+    domain and codomain of a function.

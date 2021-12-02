@@ -1,0 +1,38 @@
+* Example:
+
+  t = FOFOFFOFOOFFO  p = FOO   M = { A, ..., Z } k = 26
+
+     0  1  2
+  A  0  1  2
+  B  0  1  2
+  C  0  1  2
+  :
+  F  -  0  1
+  :
+  O  0  -  -
+  :
+  Z  0  1  2
+
+  F O F O F F O F O O F F O    skip    comment
+  f o O                          1     align to match F
+      f o O                      1     align to match F
+          f O O                  0     align to match F
+            f o O                1     align to match F
+                F O O
+
+  t = FOFOFFOFOOFFO  p = BAR
+
+  F O F O F F O F O O F F O    skip    comment
+  b a R                          2     no F in BAR
+        b a R                    2     no F in BAR
+              b a R              2     no O in BAR
+                    b a R        2     no R in BAR
+                          b . .
+
+* Worst case naive search:
+
+  t = AAAAAAAAAAA...A p = A...AX
+
+* Worst case Boyer-Moore bad character rule search:
+
+  t = AAAAAAAAAAA...A p = XA...A

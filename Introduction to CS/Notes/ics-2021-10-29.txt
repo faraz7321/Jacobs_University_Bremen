@@ -1,0 +1,87 @@
+* Combinational circuits
+
+  - Adder
+  - Multiplier
+  - Divider
+  - Bit operations (bitwise and, bitwise or, left/right shifts, ...)
+  - Magnitude comparator (<, =, >)
+
+    4-bit comparator:
+
+         +------+
+    a3 --|      |
+    a2 --|      |
+    a1 --|      |-- LT
+    a0 --|      |
+         |      |-- EQ
+    b3 --|      |
+    b2 --|      |-- GT
+    b1 --|      |
+    b0 --|      |
+         +------+
+         
+  - Multiplexer
+
+    4-bit multiplexer
+
+         +-------+
+    i3 --|       |
+    i2 --|  4:1  |
+    i1 --|  MUX  |-- y
+    i0 --|       |
+         +-------+
+           |  |
+           s1 s0
+
+  - Demultiplexer
+
+    4-bit demultiplexer
+
+         +-------+
+         |       |-- y3
+         |  1:4  |-- y2
+     i --| DEMUX |-- y1
+         |       |-- y0
+         +-------+
+           |  |
+           s1 s0
+
+* Magnitude comparator (n-bit design)
+
+** Bit comparator
+
+   Our goal here is to compare two bits a and b: LT is true if a < b
+   and GT is true of a > b. If a = b, then LT and GT will both be
+   false.
+
+   | a | b | LT | GT |   LT = ¬a ∧ b
+   |---+---+----+----|   GT = a ∧ ¬b
+   | 0 | 0 |  0 |  0 |
+   | 0 | 1 |  1 |  0 |
+   | 1 | 0 |  0 |  1 |
+   | 1 | 1 |  0 |  0 |
+
+** Aggregating comparator
+
+   Our goal here is to aggregate the result of two (bit) comparators.
+   This allows us to build a "tree" of aggregating comparators the
+   aggregate the results produced by n elementary bit operators.
+
+   | LT0 | GT0 | LT1 | GT1 | LT | GT |
+   |-----+-----+-----+-----+----+----|
+   |   0 |   0 |   0 |   0 |  0 |  0 |
+   |   0 |   0 |   0 |   1 |  0 |  1 |
+   |   0 |   0 |   1 |   0 |  1 |  0 |
+   |   0 |   1 |   0 |   0 |  0 |  1 |
+   |   0 |   1 |   0 |   1 |  0 |  1 |
+   |   0 |   1 |   1 |   0 |  1 |  0 |
+   |   1 |   0 |   0 |   0 |  1 |  0 |
+   |   1 |   0 |   0 |   1 |  0 |  1 |
+   |   1 |   0 |   1 |   0 |  1 |  0 |
+
+   GT = GT1 ∨ (GT0 ∧ (¬LT1 ∧ ¬GT1))
+      = GT1 ∨ (GT0 ∧ ¬LT1)
+      
+   LT = LT1 ∨ (LT0 ∧ (¬LT1 ∧ ¬GT1))
+      = LT1 ∨ (LT0 ∧ ¬GT1)
+

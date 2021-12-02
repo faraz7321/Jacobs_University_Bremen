@@ -1,0 +1,43 @@
+* Example proof by derivation
+
+  Theorem: For all integers a, b, and c, if a divides b (a|b) and b
+           divides c (b|c), then a divides c (a|c).
+
+  We can formalize this theorem as follows:
+  
+           ∀ a,b,c ∈ ℤ.((a|b) ∧ (b|c)) ⇒ (a|c)
+
+  Proof: Let a, b, and c be integers. Lets assume that a divides b and
+         that b divides c. In other words, b is a multiple of a and c
+         is a multiple of b. This means we can find integers k and j
+         such that b = ka and c = jb. Combining these through
+         substitution, we get:
+
+           c = j b          | substitution of b by ka
+             = j (ka)       | commutativity of multiplication
+             = (jk) a
+
+         Since jk is an integer, it follows that c is a multiple of
+         a. This finally shows that a divides c, a|c.
+
+* Example proof by contrapositive
+
+  Lets proof Theorem 2 using its contrapositive. Assume that the
+  function odd() is true whenever a number is odd and the function
+  even() is true whenever a number is even. We start by stating the
+  theorem formally.
+  
+    ∀ x,y ∈ ℤ.(odd(x) ∧ odd(y)) ⇒ odd(xy)
+  
+  To prove the contrapositive, we have to negate and swap the
+  implication.
+
+    ∀ x,y ∈ ℤ.¬odd(xy) ⇒ ¬(odd(x) ∧ odd(y))
+
+  Given that even() is the same as ¬odd, we can rewrite this as
+  follows:
+
+    ∀ x,y ∈ ℤ.even(xy) ⇒ even(x) ∨ even(y)
+
+  This can now be proven easily. We will later talk in more detail why
+  the negation of ¬(odd(x) ∧ odd(y)) equals even(x) ∨ even(y).
