@@ -1,27 +1,79 @@
+/*
+CH-230-A
+a13_p8.cpp
+Faraz Ahmad
+fahmad@jacobs.university.de
+ */
 #include <iostream>
-#include <stdexcept>
+#include <exception>
 using namespace std;
-class Garage
+
+/**
+ * @brief PARENT CLASS
+ *
+ */
+class Motor
 {
 public:
-    Garage();
-    ~Garage();
+    // constructor
+    Motor() {}
+    // destructor
+    ~Motor() {}
+    const char *what() const throw()
+    {
+        return "This motor has problems";
+    }
 };
-class Car : public Garage
+
+/**
+ * @brief A CAR HAS-A MOTOR
+ *
+ */
+class Car : public Motor
 {
 public:
-    Car();
-    ~Car();
+    // constructor
+    Car() {}
+    // destructor
+    ~Car() {}
 };
-class Motor : public Car
+
+/**
+ * @brief A GARAGE HAS-A CAR
+ *
+ */
+class Garage : public Car
 {
 public:
-    Motor();
-    ~Motor();
+    // constructors
+    Garage()
+    try : Car()
+    {
+        throw Garage("The car in this garage has problems with the motor");
+    }
+    catch (Motor &m)
+    {
+        // error message
+        cerr << m.what() << endl;
+    }
+    Garage(string str)
+    {
+        cout << str << endl;
+    }
 };
 
 int main()
 {
+    try
+    {
+        // creating instance of Garage
+        Garage garage;
+    }
+    // from the body of the Garage
+    catch (Garage &g)
+    {
+        cout << "Caught in main: " << g.what() << endl;
+    }
 
     return 0;
 }

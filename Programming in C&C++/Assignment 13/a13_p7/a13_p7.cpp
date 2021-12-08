@@ -5,33 +5,111 @@ Faraz Ahmad
 fahmad@jacobs.university.de
  */
 #include <iostream>
-#include <stdexcept>
+#include <exception>
 using namespace std;
-void error(int i);
+void myexception(int n);
+string printBool(bool flag);
 class OwnException : public exception
 {
 public:
-    string ex = "Default case exception";
-    OwnException();
-    ~OwnException();
-    void what() { cout << "OwnException\n"; }
+    // constructors
+    OwnException() {}
+    OwnException(string str);
+    // destructor
+    ~OwnException() {}
+    // overriding what()
+    virtual const char *what() const throw()
+    {
+        return "OwnException\n";
+    }
 };
+
+/**
+ * @brief Construct a new Own Exception:: Own Exception object
+ *
+ * @param str
+ */
+OwnException::OwnException(string str)
+{
+    cout << str << endl;
+}
+
 int main()
 {
+    // integer exceptoin
     try
     {
+        myexception(1);
     }
-    catch (const std::exception &e)
+    catch (char c)
     {
-        std::cerr << "Caught in main: " << e.what();
+        cerr << "Caught in main: " << c << endl;
+    }
+
+    // character exception
+    try
+    {
+        myexception(2);
+    }
+
+    catch (int n)
+    {
+        cerr << "Caught in main: " << n << endl;
+    }
+
+    // bool exception
+    try
+    {
+        myexception(3);
+    }
+
+    catch (bool b)
+    {
+        cerr << "Caught in main: " << printBool(b) << endl;
+    }
+
+    // default case exception
+    try
+    {
+        myexception(4);
+    }
+
+    catch (const OwnException &e)
+    {
+        cerr << "Caught in main: " << e.what() << endl;
     }
 
     return 0;
 }
-void error(int i)
+void myexception(int n)
 {
-    char c = 'a';
-    int x = 12;
-    bool flag = true;
-    OwnException oe;
+    if (n == 1)
+    {
+        throw 'a';
+    }
+    else if (n == 2)
+    {
+        throw 12;
+    }
+    else if (n == 3)
+    {
+        throw true;
+    }
+    else
+    {
+        throw OwnException("Default case exception");
+    }
+}
+string printBool(bool flag)
+{
+    string str;
+    if (flag == true)
+    {
+        str = "True";
+    }
+    else
+    {
+        str = "False";
+    }
+    return str;
 }
