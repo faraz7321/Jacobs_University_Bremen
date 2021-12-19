@@ -13,9 +13,13 @@ void push(Stack *st, int x)
     }
     else
     {
+        // printf("%d\n", st->count);
         printf("Pushing %d\n", x);
-        st->count++;
+
         st->array[st->count] = x;
+        st->count++;
+
+        // printf("%d\n", st->count);
     }
     return;
 }

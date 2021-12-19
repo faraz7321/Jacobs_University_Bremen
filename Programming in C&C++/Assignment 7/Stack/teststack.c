@@ -4,7 +4,7 @@ a7_p7.c
 Faraz Ahmad
 fahmad@jacobs.university.de
  */
-#include "stack.h"
+#include "stack.c"
 
 int main()
 {
@@ -44,6 +44,15 @@ int main()
             printf("Quit\n");
             free(st);
             exit(0);
+            break;
+        }
+        case 't':
+        {
+            for (int i = 0; i < st->count; i++)
+            {
+                printf("%d, ", st->array[i]);
+            }
+
             break;
         }
         default:
