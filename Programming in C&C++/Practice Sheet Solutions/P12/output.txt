@@ -1,0 +1,8 @@
+Congo-Chambeshi 4700 3680000
+Ob-Irtysh 5410 2990000
+Yellow 5464 745000
+Yenisei-Angara-Selenga 5539 2580000
+Mississippi-Missouri 6275 2980000
+Yangtze 6300 1800000
+Amazon 6400 6915000
+Nile 6650 334900
