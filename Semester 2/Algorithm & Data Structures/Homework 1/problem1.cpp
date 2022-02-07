@@ -1,6 +1,6 @@
 /*
 CH-231-1
-p1_a1.cpp
+problem1.cpp
 Faraz Ahmad
 fa.ahmad@jacobs-university.de
 */
