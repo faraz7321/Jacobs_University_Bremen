@@ -1,0 +1,10 @@
+next, current, prev = NULL pointers for nodes
+current = linkedList.head
+while current != NULL:
+    next = current.next
+    current.next = prev
+    prev = current
+    current = next
+linkedList.head = prev
+
+// this is an in-situ algorithm

@@ -1,0 +1,1 @@
+check(myset, random);

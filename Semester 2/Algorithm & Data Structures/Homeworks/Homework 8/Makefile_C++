@@ -1,0 +1,23 @@
+p1_compile: 8_1a.cpp
+	g++ -Wall -o p1 8_1a.cpp
+
+p1_run: p1
+	./p1
+
+p2_compile: 8_1b.cpp
+	g++ -Wall -o p2 8_1b.cpp
+
+p2_run: p2
+	./p2
+
+p3_compile: 8_1d.cpp
+	g++ -Wall -o p3 8_1d.cpp
+
+p3_run: p3
+	./p3
+	
+p4_compile: 8_2a.cpp
+	g++ -Wall -o p4 8_2a.cpp
+
+p4_run: p4
+	./p4
