@@ -1,5 +1,0 @@
-p2_compile: a10_p2.cpp
-	g++ -Wall -o p2 a10_p2.cpp
-
-p2_run: p2
-	./p2

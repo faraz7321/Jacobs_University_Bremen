@@ -1,4 +1,0 @@
-faraz ahmad,07/05/2001
-john doe,04/08/2021
-abc,21/12/1987
-test test,12/12/2012
