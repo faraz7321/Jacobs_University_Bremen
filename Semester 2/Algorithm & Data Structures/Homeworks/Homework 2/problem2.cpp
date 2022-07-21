@@ -12,7 +12,7 @@ void print(deque<float> const &deq, string sep);
 int main()
 {
     deque<float> A;
-    int input;
+    float input;
     do
     {
         cin >> input;

@@ -52,7 +52,23 @@ public:
     void add_back(T item);
     void add_front(T item);
     void displayAll();
+    int getSize();
+    ~LinkedList();
 };
+template <typename T>
+LinkedList<T>::~LinkedList()
+{
+    Node<T> *temp = head;
+    cout << "\n----Destructor----\n";
+    cout << "Front: " << temp->data << endl;
+    for (int i = 0; i < getSize() - 1; i++)
+    {
+        temp = temp->next;
+    }
+
+    cout << "Back: " << temp->data;
+    free(head);
+}
 
 /**
  * @brief Add a new node at the back of linked lisy
@@ -116,4 +132,16 @@ void LinkedList<T>::displayAll()
         cout << temp->data << " | ";
         temp = temp->next;
     }
+}
+template <typename T>
+int LinkedList<T>::getSize()
+{
+    int size = 0;
+    Node<T> *temp = head;
+    while (temp != NULL)
+    {
+        size++;
+        temp = temp->next;
+    }
+    return size;
 }

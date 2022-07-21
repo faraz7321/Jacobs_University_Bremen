@@ -19,5 +19,6 @@ int main()
     list.add_front(5);
     list.add_back(6);
     list.displayAll();
+    cout << "size: "<< list.getSize();
     return 0;
 }

@@ -54,6 +54,7 @@ int main()
     A.merge(B);
     A.sort(); // sorting in accending order
     print(A, cout, " ");
+    myfile.close();
     return 0;
 }
 /**
