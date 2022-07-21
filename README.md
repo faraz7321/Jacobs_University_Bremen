@@ -1,2 +1,2 @@
-# Jacobs_University_Bremen
+# Jacobs University Bremen (CS)
 Assignments and stuff
