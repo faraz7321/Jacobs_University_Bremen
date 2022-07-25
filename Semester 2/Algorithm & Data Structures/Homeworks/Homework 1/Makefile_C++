@@ -1,3 +1,4 @@
+# specify directory
 p1_compile: problem1.cpp
 	g++ -Wall -o p1 problem1.cpp
 

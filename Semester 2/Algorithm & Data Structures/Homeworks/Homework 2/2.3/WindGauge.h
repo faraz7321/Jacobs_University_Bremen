@@ -1,11 +1,8 @@
-/*
-CH-231-1
-WindGauge.h
-Faraz Ahmad
-fa.ahmad@jacobs-university.de
-*/
-#include <iostream>
-using namespace std;
+#ifndef H_WIND_GAUGE
+#define H_WIND_GAUGE
+
+#include <deque>
+
 class WindGauge
 {
 public:
@@ -15,6 +12,12 @@ public:
     int lowest() const;
     int average() const;
 
+    // THE DUMP FUNCTIION
+    void DUMP();
+
 private:
-    // add properties and/or method(s) here
+    std::deque<int> history;
+    unsigned int period;
 };
+
+#endif

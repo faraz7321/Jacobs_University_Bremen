@@ -52,6 +52,7 @@ bool loadData(map<string, string> &mymap, string filename)
 {
     string name, dob;
     string line;
+    stringstream ss;
     ifstream myfile(filename);
     if (!myfile.is_open())
     {
@@ -63,9 +64,9 @@ bool loadData(map<string, string> &mymap, string filename)
         while (!myfile.eof())
         {
             getline(myfile, line);
-            stringstream ss(line);
-            getline(ss, name, ',');
-            getline(ss, dob, ',');
+            name = line;
+            getline(myfile, line);
+            dob = line;
             mymap.insert({name, dob});
         }
         myfile.close();
