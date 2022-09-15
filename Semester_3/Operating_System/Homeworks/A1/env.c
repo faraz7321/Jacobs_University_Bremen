@@ -3,18 +3,12 @@
  * fa.ahmad@jacobs-university.de
  * CO-562 Operating Systems
  * env.c
-*/
+ */
 
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdbool.h>
-
-// Function Declaration
-void printEnv();
-void unset(char *);
-void newEnv();
-bool addVar(char *);
 
 /* environ is defined as a global variable
 in the Glibc source file posix/environ.c*/
@@ -23,6 +17,15 @@ extern char **environ;
 int main(int argc, char *argv[])
 {
     int opt;
+    argv[0] += 2; // removes "./" from "./env"
+
+    // printf("\n\n%s\n", argv[0]); // ./env
+    // return 0;
+
+    // we need to parse the string into n commands provided
+    // dynamically allocate string arrays for commands and strings
+    // [command1, arg1, arg2 ..argn]
+    // [command2, arg1, arg2 ..argn]
 
     while ((opt = getopt(argc, argv, "-:i0u:v")) != -1)
     {
@@ -40,89 +43,31 @@ int main(int argc, char *argv[])
             _exit(0);
             break;
         }
-        case 'i':
+        case 'i': // new env
         {
-            newEnv();
+            execvp(argv[0], argv);
             break;
         }
 
-        case 'u':
+        case 'u': //-u name, the program removes the variable name from the environment
         {
-            unset(optarg);
+            execvp(argv[0], argv);
             break;
         }
 
-        case 'v':
+        case 'v': // writes a trace of what it is doing to the standard error
         {
-            printEnv();
+            execvp(argv[0], argv);
             break;
         }
 
         case 1:
         {
-            if (!addVar(optarg))
-            {
-                printf("err\n");
-                _exit(0);
-            }
+            execvp(argv[0], argv);
             break;
         }
         }
     }
-    printEnv();
+    execvp(argv[0], argv); // print env
     return 0;
-}
-
-void printEnv()
-{
-    for (int i = 0; environ[i] != NULL; i++)
-    {
-        printf("%s\n", environ[i]);
-    }
-}
-
-void unset(char *name)
-{
-    char *c;
-    int j;
-    for (int i = 0; environ[i] != NULL; i++)
-    {
-        if ((c = strstr(environ[i], name)) != NULL)
-        {
-            for (j = i; environ[j + 1] != NULL; j++)
-            {
-                environ[j] = environ[j + 1];
-            }
-            environ[j] = NULL;
-            break;
-        }
-    }
-}
-
-void newEnv()
-{
-    for (int i = 0; environ[i] != NULL; i++)
-    {
-        environ[i] = NULL;
-    }
-}
-
-bool addVar(char *var)
-{
-    int i;
-
-    if (strstr(var, "="))
-    {
-        for (i = 0; environ[i] != NULL; i++)
-        {
-            continue;
-        }
-        environ[i] = var;
-        environ[i + 1] = NULL;
-        return true;
-    }
-    else
-    {
-        return false;
-    }
 }
