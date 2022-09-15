@@ -1,0 +1,7 @@
+text segment:
+
+data segment:
+
+heap segment:
+
+stack segment:

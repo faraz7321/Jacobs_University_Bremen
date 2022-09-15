@@ -1,9 +1,9 @@
 /*
- * Faraz Ahmad fa.ahmad@jacobs-university.de
+ * Faraz Ahmad
+ * fa.ahmad@jacobs-university.de
  * CO-562 Operating Systems
- * p1_a3
  * env.c
- */
+*/
 
 #include <stdio.h>
 #include <unistd.h>

@@ -55,3 +55,4 @@ int main(int argc, char *argv[])
 
     return status;
 }
+// ./4_echo-pthread $(seq 1 100)
