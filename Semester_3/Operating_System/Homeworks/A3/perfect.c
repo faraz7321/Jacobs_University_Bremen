@@ -18,9 +18,6 @@
         fprintf(stderr, "perfect: t%d searching [%lu,%lu]\n", __fmt, ##__VA_ARGS__); \
     } while (0)
 
-#define START 1
-#define END 10000
-
 typedef struct argData
 {
     int thread_number;
@@ -32,8 +29,8 @@ static void *start_routine(void *);
 static int counter;
 
 // Global static variables
-static uint64_t s = START;
-static uint64_t e = END;
+static uint64_t s = 1;
+static uint64_t e = 10000;
 int num_threads = 1;
 static uint64_t interval;
 static int DEBUGMOD = 0;
