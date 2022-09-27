@@ -1,3 +1,9 @@
+/*
+ * Faraz Ahmad
+ * fa.ahmad@jacobs-university.de
+ * CO-562 Operating Systems
+ * perfect.c
+ */
 
 #include <stdio.h>
 #include <stdint.h>
