@@ -16,13 +16,23 @@
 #include <sys/syscall.h>
 #include <stdarg.h>
 #include <time.h>
+#define DEBUG 1
 
-// defines
+#if DEBUG == 0
+#define PRINTF(__fmt, ...)                     \
+    do                                         \
+    {                                          \
+        fprintf(stderr, __fmt, ##__VA_ARGS__); \
+    } while (0)
+
+#elif DEBUG == 1
 #define PRINTF(__fmt, ...)                                                           \
     do                                                                               \
     {                                                                                \
         fprintf(stderr, "perfect: t%d searching [%lu,%lu]\n", __fmt, ##__VA_ARGS__); \
     } while (0)
+
+#endif
 
 typedef struct argData
 {
@@ -129,7 +139,7 @@ void *start_routine(void *arg)
 
     if (DEBUGMOD)
     {
-        fprintf(stderr, "perfect: t%d searching [%lu,%lu]\n", current_thread_data->thread_number - 1, startpart, endpart);
+        PRINTF(current_thread_data->thread_number - 1, startpart, endpart);
     }
     for (uint64_t i = startpart; i < endpart; i++)
     {
