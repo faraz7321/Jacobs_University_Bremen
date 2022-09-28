@@ -37,6 +37,7 @@
 typedef struct argData
 {
     int thread_number;
+    uint64_t start, end;
 } argData_t;
 
 // function prototypes
@@ -44,11 +45,16 @@ static int is_perfect(uint64_t);
 static void *start_routine(void *);
 static int counter;
 
-// Global static variables
+// Global static variables//
+// default start and end
 static uint64_t s = 1;
 static uint64_t e = 10000;
-int num_threads = 1;
 static uint64_t interval;
+
+// threads
+int num_threads = 1;
+
+// select debug mod
 static int DEBUGMOD = 0;
 
 int main(int argc, char *argv[])
@@ -82,7 +88,7 @@ int main(int argc, char *argv[])
     }
 
     pthread_t id[num_threads];
-    argData_t arg_arr[num_threads];
+    argData_t arg_arr[num_threads]; // struct to pass data
     interval = e - s + 1;
 
     start = clock();
@@ -91,6 +97,8 @@ int main(int argc, char *argv[])
     for (thread_no = 1; thread_no <= num_threads; thread_no++)
     {
         arg_arr[thread_no - 1].thread_number = thread_no;
+        arg_arr[thread_no - 1].end = ((thread_no) * ((interval) / num_threads));
+        arg_arr[thread_no - 1].start = arg_arr[thread_no - 1].end - (interval / num_threads) + 1;
         pthread_create(&id[thread_no - 1], NULL, start_routine, &arg_arr[thread_no - 1]);
     }
 
@@ -101,18 +109,25 @@ int main(int argc, char *argv[])
         if (DEBUGMOD)
         {
             fprintf(stderr, "perfect: t%d finishing\n", i - 1);
+            // PRINTF(stderr, "perfect: t%d finishing\n", i - 1);
         }
     }
 
     end = clock();
     time_taken = ((double)(end - start)) / CLOCKS_PER_SEC;
 
-    // printf("threads completed\n");
+    // PRINTF("threads completed\n");
     printf("Time taken= %lf\n", time_taken);
 
     return 0;
 }
 
+/**
+ * @brief checks number if perfect
+ *
+ * @param num
+ * @return int
+ */
 static int is_perfect(uint64_t num)
 {
     uint64_t i, sum;
@@ -130,22 +145,26 @@ static int is_perfect(uint64_t num)
     return (sum == num);
 }
 
+/**
+ * @brief routine process
+ *
+ * @param arg
+ * @return void*
+ */
 void *start_routine(void *arg)
 {
     argData_t *current_thread_data = (argData_t *)arg;
 
-    uint64_t endpart = ((current_thread_data->thread_number) * ((interval) / num_threads));
-    uint64_t startpart = endpart - (interval / num_threads) + 1;
-
     if (DEBUGMOD)
     {
-        PRINTF(current_thread_data->thread_number - 1, startpart, endpart);
+        PRINTF(current_thread_data->thread_number - 1, current_thread_data->start, current_thread_data->end);
     }
-    for (uint64_t i = startpart; i < endpart; i++)
+    for (uint64_t i = current_thread_data->start; i < current_thread_data->end; i++)
     {
         if (is_perfect(i))
         {
             printf("%lu\n", i);
+            // PRINTF("%lu\n", i);
         }
     }
 
