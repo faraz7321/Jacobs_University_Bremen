@@ -40,6 +40,8 @@ typedef struct argData
     uint64_t start, end;
 } argData_t;
 
+static const char *progname = "perfect";
+
 // function prototypes
 static int is_perfect(uint64_t);
 static void *start_routine(void *);
@@ -62,28 +64,52 @@ int main(int argc, char *argv[])
     clock_t start, end;
     double time_taken;
     int thread_no = 1;
-
-    //  checking arguments for options
-    for (int i = 1; i < argc; i++)
+    int c;
+    while ((c = getopt(argc, argv, "s:e:t:vh")) != -1)
     {
-        if (argv[i][0] == '-')
+        switch (c)
         {
-            if (argv[i][1] == 's')
+        case 's':
+        {
+            if ((s = atoi(optarg)) <= 0)
             {
-                s = atoi(argv[i + 1]);
+                fprintf(stderr, "start must be > 0\n");
+                exit(EXIT_FAILURE);
             }
-            if (argv[i][1] == 'e')
+            break;
+        }
+        case 'e':
+        {
+            if ((e = atoi(optarg)) <= 0)
             {
-                e = atoi(argv[i + 1]);
+                fprintf(stderr, "end must be > 0\n");
+                exit(EXIT_FAILURE);
             }
-            if (argv[i][1] == 't')
+            break;
+        }
+        case 't':
+        {
+            if ((num_threads = atoi(optarg)) <= 0)
             {
-                num_threads = atoi(argv[i + 1]);
+                fprintf(stderr, "threads must be > 0\n");
+                exit(EXIT_FAILURE);
             }
-            if (argv[i][1] == 'v')
-            {
-                DEBUGMOD = 1;
-            }
+            break;
+        }
+        case 'v':
+        {
+            DEBUGMOD = 1;
+            break;
+        }
+        case 'h':
+        {
+            printf("Usage: %s [-s start] [-e end] [-h help]", progname);
+            printf("[-v trace] [-t threads no.]");
+            exit(EXIT_SUCCESS);
+        }
+
+        default:
+            break;
         }
     }
 
