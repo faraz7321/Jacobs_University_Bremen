@@ -42,7 +42,7 @@ typedef struct
 } drawer_t;
 
 static double timeit(int n, void *(*proc)(void *));
-void run_threads(int size, void *(*proc)(void *));
+void run_threads(int n, void *(*proc)(void *));
 
 void initialize(int num_of_prisoners);
 void *random_drawer(void *ptr);
@@ -149,17 +149,17 @@ void initialize(int num_of_prisoners)
         drawers[i] = (drawer_t){.card = card, .opened = false};
     }
 }
-void run_threads(int size, void *(*proc)(void *))
+void run_threads(int n, void *(*proc)(void *))
 {
-    pthread_t id[size];
+    pthread_t id[n];
     // creating the child threads
-    for (int i = 1; i <= size; i++)
+    for (int i = 1; i <= n; i++)
     {
         pthread_create(&id[i - 1], NULL, proc, NULL);
     }
 
     // joining the threads one by one
-    for (int i = 1; i <= size; i++)
+    for (int i = 1; i <= n; i++)
     {
         pthread_join(id[i - 1], NULL);
     }
