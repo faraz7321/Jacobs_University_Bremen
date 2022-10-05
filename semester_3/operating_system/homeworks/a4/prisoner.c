@@ -41,7 +41,7 @@ bool victory = true;
 /** FUNCTION PROTOTYPES **/
 // thread functions
 static double timeit(int n, void *(*proc)(void *));
-void run_threads(int n, void *(*proc)(void *));
+void run_threads(int num_of_prisoners, void *(*proc)(void *));
 
 // utility functions
 void initialize(int num_of_prisoners);
@@ -118,16 +118,16 @@ int main(int argc, char **argv)
  * @param proc
  * @param n
  */
-void run_games(char *game, void *(*proc)(void *), uint64_t n)
+void run_games(char *game, void *(*proc)(void *), uint64_t num_of_games)
 {
     wins = 0;
     double time = 0.0;
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < num_of_games; ++i)
     {
         initialize(PRISONERS);
         time += timeit(PRISONERS, proc);
     }
-    printf("method %s     %9lu/%lu = %2.2lf%%  %3.3lf ms\n", game, wins, n, (100.0 * wins) / n, time);
+    printf("method %s     %9lu/%lu = %2.2lf%%  %3.3lf ms\n", game, wins, num_of_games, (100.0 * wins) / num_of_games, time);
 }
 
 /**
@@ -190,18 +190,18 @@ static double timeit(int n, void *(*proc)(void *))
  * @param n
  * @param proc
  */
-void run_threads(int n, void *(*proc)(void *))
+void run_threads(int num_of_prisoners, void *(*proc)(void *))
 {
-    pthread_t id[n];
+    pthread_t id[num_of_prisoners];
     victory = true;
     // creating the child threads
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < num_of_prisoners; i++)
     {
         pthread_create(&id[i], NULL, proc, &i);
     }
 
     // joining the threads one by one
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < num_of_prisoners; i++)
     {
         pthread_join(id[i], NULL);
     }
