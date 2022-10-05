@@ -17,6 +17,7 @@
 #include <stdarg.h>
 #include <time.h>
 
+// number of total prisoners
 #define PRISONERS 100
 
 typedef struct
@@ -55,19 +56,20 @@ void *strategy_global(void *ptr);
 
 int main(int argc, char **argv)
 {
+    uint64_t num_of_games = 100;
+    int seed;
+    int c;
 
     srand(time(NULL));
 
+    // initialize mutexes
     for (int i = 0; i < PRISONERS; ++i)
     {
         pthread_mutex_init(&mutexes[i], NULL);
     }
     pthread_mutex_init(&mutex, NULL);
 
-    uint64_t num_of_games = 100;
-    int seed;
-    int c;
-
+    // get command line arguments options
     while ((c = getopt(argc, argv, "n:s:h")) != -1)
     {
         switch (c)
@@ -99,7 +101,8 @@ int main(int argc, char **argv)
             break;
         }
     }
-    // printf("starting\n");
+
+    // run all four strategies
     run_games("random_drawer  ", random_drawer, num_of_games);
     run_games("random_global  ", random_global, num_of_games);
     // run_games("strategy_drawer", strategy_drawer, num_of_games);
@@ -107,6 +110,14 @@ int main(int argc, char **argv)
 
     return EXIT_SUCCESS;
 }
+
+/**
+ * @brief runs a single strategy n times
+ *
+ * @param game
+ * @param proc
+ * @param n
+ */
 void run_games(char *game, void *(*proc)(void *), uint64_t n)
 {
     wins = 0;
@@ -119,6 +130,11 @@ void run_games(char *game, void *(*proc)(void *), uint64_t n)
     printf("method %s     %9lu/%lu = %2.2lf%%  %3.3lf ms\n", game, wins, n, (100.0 * wins) / n, time);
 }
 
+/**
+ * @brief initialize drawers
+ *
+ * @param num_of_prisoners
+ */
 void initialize(int num_of_prisoners)
 {
     free(drawers);
@@ -151,6 +167,14 @@ void initialize(int num_of_prisoners)
         drawers[i] = (drawer_t){.card = card, .opened = false};
     }
 }
+
+/**
+ * @brief calculate time for a single game
+ *
+ * @param n
+ * @param proc
+ * @return double
+ */
 static double timeit(int n, void *(*proc)(void *))
 {
     clock_t t1, t2;
@@ -159,6 +183,13 @@ static double timeit(int n, void *(*proc)(void *))
     t2 = clock();
     return ((double)t2 - (double)t1) / CLOCKS_PER_SEC * 1000;
 }
+
+/**
+ * @brief creates n threads
+ *
+ * @param n
+ * @param proc
+ */
 void run_threads(int n, void *(*proc)(void *))
 {
     pthread_t id[n];
@@ -180,6 +211,7 @@ void run_threads(int n, void *(*proc)(void *))
         wins += 1;
     }
 }
+
 void *random_drawer(void *ptr)
 {
     int select;
@@ -331,6 +363,12 @@ void *strategy_global(void *ptr)
     }
     pthread_mutex_unlock(&mutex);
 }
+
+/**
+ * @brief closes all drawers
+ *
+ * @param n
+ */
 void resetDrawers(int n)
 {
     for (int j = 0; j < n; j++)
