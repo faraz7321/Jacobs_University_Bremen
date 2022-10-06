@@ -62,13 +62,6 @@ int main(int argc, char **argv)
 
     srand(time(NULL));
 
-    // initialize mutexes
-    for (int i = 0; i < PRISONERS; ++i)
-    {
-        pthread_mutex_init(&mutexes[i], NULL);
-    }
-    pthread_mutex_init(&mutex, NULL);
-
     // get command line arguments options
     while ((c = getopt(argc, argv, "n:s:h")) != -1)
     {
@@ -105,7 +98,7 @@ int main(int argc, char **argv)
     // run all four strategies
     run_games("random_drawer  ", random_drawer, num_of_games);
     run_games("random_global  ", random_global, num_of_games);
-    // run_games("strategy_drawer", strategy_drawer, num_of_games);
+    run_games("strategy_drawer", strategy_drawer, num_of_games);
     run_games("strategy_global", strategy_global, num_of_games);
 
     return EXIT_SUCCESS;
@@ -127,7 +120,7 @@ void run_games(char *game, void *(*proc)(void *), uint64_t num_of_games)
         initialize(PRISONERS);
         time += timeit(PRISONERS, proc);
     }
-    printf("method %s     %9lu/%lu = %2.2lf%%  %3.3lf ms\n", game, wins, num_of_games, (100.0 * wins) / num_of_games, time);
+    printf("method %s     %9lu/%lu = %5.2lf%%  %3.3lf ms\n", game, wins, num_of_games, (100.0 * wins) / num_of_games, time);
 }
 
 /**
@@ -137,6 +130,13 @@ void run_games(char *game, void *(*proc)(void *), uint64_t num_of_games)
  */
 void initialize(int num_of_prisoners)
 {
+    // initialize mutexes
+    for (int i = 0; i < PRISONERS; ++i)
+    {
+        pthread_mutex_init(&mutexes[i], NULL);
+    }
+    pthread_mutex_init(&mutex, NULL);
+
     free(drawers);
     int j, card;
     bool unique;
@@ -223,20 +223,18 @@ void *random_drawer(void *ptr)
     {
         is_drawer_opened[j] = false;
     }
-    // printf("innnn %d\n", *i);
+
     for (int j = 0; j < 50; j++)
     {
         do
         {
             select = rand() % PRISONERS + 1;
         } while (is_drawer_opened[select]);
-        // printf("in %d\n", j);
         pthread_mutex_lock(&mutexes[select]);
 
         if (drawers[select].card == *i)
         {
             foundCard = true;
-            // printf("found\n");
             pthread_mutex_unlock(&mutexes[select]);
             break;
         }
@@ -253,16 +251,14 @@ void *random_global(void *ptr)
 {
     int *i = (int *)ptr;
     int select;
-
     pthread_mutex_lock(&mutex);
-
     bool foundCard = false;
     for (int j = 0; j < 50; j++)
     {
         do
         {
             select = rand() % PRISONERS + 1;
-        } while (drawers[select].opened == true);
+        } while (drawers[select].opened);
 
         if (drawers[select].card == *i)
         {
@@ -283,21 +279,21 @@ void *random_global(void *ptr)
 
 void *strategy_drawer(void *ptr)
 {
-    int select;
     int *i = (int *)ptr;
+    int select;
+    select = *i;
     bool foundCard = false;
+
     bool is_drawer_opened[100];
     for (int j = 0; j < 100; j++)
     {
         is_drawer_opened[j] = false;
     }
-    select = *i;
-    foundCard = false;
+
     for (int j = 0; j < 50; j++)
     {
-        pthread_mutex_lock(&mutexes[select]);
         is_drawer_opened[select] = true;
-
+        pthread_mutex_lock(&mutexes[select]);
         if (drawers[select].card == *i)
         {
             foundCard = true;
@@ -310,15 +306,18 @@ void *strategy_drawer(void *ptr)
             {
                 select = rand() % PRISONERS + 1;
             } while (is_drawer_opened[select]);
+            pthread_mutex_lock(&mutexes[select]);
         }
         else
         {
+            pthread_mutex_unlock(&mutexes[select]);
             select = drawers[select].card;
+            pthread_mutex_lock(&mutexes[select]);
         }
-
         pthread_mutex_unlock(&mutexes[select]);
     }
 
+    resetDrawers(PRISONERS);
     if (!foundCard)
     {
         victory = false;
@@ -357,6 +356,7 @@ void *strategy_global(void *ptr)
     }
 
     resetDrawers(PRISONERS);
+
     if (!foundCard)
     {
         victory = false;
