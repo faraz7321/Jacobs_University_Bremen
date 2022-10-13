@@ -29,7 +29,7 @@ account_t to;
 
 int main()
 {
-    int thread_num = 6; // number of threads
+    int thread_num = 5; // number of threads
     __init();
     run_threads(thread_num, transfer);
     printf("from: %u\nmoney: %u\n", from.number, from.money);

@@ -1,0 +1,47 @@
+5.1
+	a) if transfer function is running concurrently and the account 
+	   which is transferring money to other account becomes the receiving account
+	   in other thread, there will be a deadlock.	   
+
+	b) 
+		void transfer(unsigned int money, account_t *from, account_t *to)
+		{
+			pthread_mutex_lock(&from->lock);
+		    	from->money -= money;
+		    	pthread_mutex_unlock(&from->lock);
+
+		    	pthread_mutex_lock(&to->lock);
+		    	to->money += money;
+		    	pthread_mutex_unlock(&to->lock);
+		}
+
+5.2
+
+	n = 5 processes, m = 5 resource types
+	t = (6, 17, 9, 10, 7)
+			---------------			---------------
+			|2  5  3  3  2|			|0  5  3  1  1|					
+			|3  5  8 10  1|			|0  2  1  1  1|				
+		M =	|4 12  4  9  2|	    A = |0  7  1  2  1|			
+			|6  1  4  5  5|			|3  1  1  1  0|		
+			|1  2  3  4  5|			|1  2  3  2  1|			
+			---------------			---------------
+
+		N =	M - A
+			---------------	
+			|2  0  0  2  1|
+			|3  3  7  9  0|
+		N =	|4  5  3  7  1|
+			|3  0  3  4  5|
+			|0  0  0  2  4|
+			---------------
+
+		a = (2, 0, 0, 3, 3)			R{1}
+		a = (2, 5, 3, 4, 4)			R{5}
+		a = (3, 7, 6, 6, 5)			R{4}
+		a = (6, 8, 7, 7, 5)			R{3}
+		a = (6, 15, 8, 9, 6)		R{2}
+		a = (6, 17, 9, 10, 7)		Safe state
+
+5.3
+	see attached image in zip
