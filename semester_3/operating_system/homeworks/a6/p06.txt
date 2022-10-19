@@ -1,0 +1,13 @@
+Q2
+    a)
+    internally defined: 
+        in a.c = f, z;
+        in b.c = y, z, g;
+
+    referenced to externally defined:
+        in a.c = x;
+        in b.c = h;
+    
+    weak:
+        a.c = y;
+        b.c = 
