@@ -1,13 +1,15 @@
-Q2
-    a)
-    internally defined: 
-        in a.c = f, z;
-        in b.c = y, z, g;
+Q2 b)
 
-    referenced to externally defined:
-        in a.c = x;
-        in b.c = h;
-    
-    weak:
-        a.c = y;
-        b.c = 
+    b.c: f()
+    b.c: g()
+    a.c: h()
+    a.c: g()
+    a.c: f()
+
+    c)
+    all C style header files (stdio.h, string.h, etc) have their declarations in the extern “C” block.
+    1. Since C++ supports function overloading, additional information has to be added to function names 
+    (called Name mangling) to avoid conflicts in binary code. 
+    2. Function names may not be changed in C as it doesn’t support function overloading. 
+    To avoid linking problems, C++ supports the extern “C” block. C++ compiler makes sure that names 
+    inside the extern “C” block are not changed.
