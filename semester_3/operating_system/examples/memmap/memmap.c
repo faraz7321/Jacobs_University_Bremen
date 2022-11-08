@@ -23,8 +23,8 @@
 #define MAP_ANONYMOUS MAP_ANON
 #endif
 
-extern void mapit(int flags);
-extern void pmap(const char *msg, int flags);
+void mapit(int flags);
+void pmap(const char *msg, int flags);
 
 static const char *progname = "memmap";
 
