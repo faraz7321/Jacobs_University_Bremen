@@ -1,0 +1,15 @@
+[package]
+name = "pong"
+version = "0.1.0"
+authors = ["Jürgen Schönwälder <j.schoenwaelder@jacobs-university.de>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+cursive = "0.16"
+rand = "0.8.4"
+
+[profile.release]
+lto = true
+panic = 'abort'
