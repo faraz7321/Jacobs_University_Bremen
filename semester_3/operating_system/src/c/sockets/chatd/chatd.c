@@ -18,6 +18,11 @@
 #include "tcp.h"
 #include "clnt.h"
 
+typedef struct {
+    char *address;
+    int fd;
+} listen_t;
+
 static void usage(FILE *stream, int status)
 {
     (void) fprintf(stream, "usage: chatd port\n");
@@ -26,10 +31,13 @@ static void usage(FILE *stream, int status)
 
 int main(int argc, char *argv[])
 {
-    int fd, i;
     struct event_base *evb;
     struct event *ev;
-    const char *interfaces[] = { "0.0.0.0", "::", NULL };
+    listen_t *iface, interfaces[] = {
+        { .address = "0.0.0.0" },               /* IPv4 any address */
+        { .address = "::" },                    /* IPv6 any address */
+        { .address = NULL }                     /* end marker */
+    };
     
     if (argc != 2) {
         usage(stderr, EXIT_FAILURE);
@@ -45,12 +53,12 @@ int main(int argc, char *argv[])
         fprintf(stderr, "event_base_new: failed\n");
         return EXIT_FAILURE;
     }
-    for (i = 0; interfaces[i]; i++) {
-        fd = tcp_listen(interfaces[i], argv[1]);
-        if (fd == -1) {
+    for (iface = interfaces; iface->address; iface++) {
+        iface->fd = tcp_listen(iface->address, argv[1]);
+        if (iface->fd == -1) {
 	    continue;
 	}
-	ev = event_new(evb, fd, EV_READ|EV_PERSIST, clnt_join, evb);
+	ev = event_new(evb, iface->fd, EV_READ|EV_PERSIST, clnt_join, evb);
 	event_add(ev, NULL);
     }
     if (event_base_loop(evb, 0) == -1) {
@@ -59,6 +67,5 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
     (void) event_base_free(evb);
-    (void) tcp_close(fd);
     return EXIT_SUCCESS;
 }

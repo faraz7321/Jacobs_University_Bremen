@@ -13,6 +13,7 @@ typedef struct player
     int solved;     /* correctly solved challenges */
     int total;      /* total number of challenges */
     bool finished;  /* true if we are done */
+    int state;      /* current state */
     chlng_t *chlng; /* current challenge */
 } player_t;
 
@@ -37,4 +38,12 @@ extern int player_get_challenge(player_t *, char **);
 /* Post a message to the player and retrieve the response message. */
 extern int player_post_challenge(player_t *, char *, char **);
 
+enum PLAYER_STATE
+{
+    NEW,      /* new player */
+    WRONG,    /* last guess was wrong */
+    GUESSED,  /* last guess was correct */
+    CONTINUE, /* continue with another guess */
+    FINISHED  /* player finished the game */
+};
 #endif

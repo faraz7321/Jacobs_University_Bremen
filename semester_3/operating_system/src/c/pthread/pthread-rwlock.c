@@ -9,38 +9,40 @@
 
 #include <pthread.h>
 
-static unsigned int count = 0;          /* shared variable */
-static pthread_rwlock_t rwlock = PTHREAD_RWLOCK_INITIALIZER;
+typedef struct {
+    unsigned int counter;       /* shared counter */
+    pthread_rwlock_t rwlock;    /* read/write lock for the counter */
+} counter_t;
 
-static void* reader(void *ignored)
+static void* reader(void *arg)
 {
-    (void) ignored;
+    counter_t *c = (counter_t *) arg;
     
-    (void) pthread_rwlock_rdlock(&rwlock);
-    int x = count + count;
-    (void) x;
-    (void) pthread_rwlock_unlock(&rwlock);
+    (void) pthread_rwlock_rdlock(&c->rwlock);
+    (void) (c->counter + c->counter);
+    (void) pthread_rwlock_unlock(&c->rwlock);
     return NULL;
 }
 
-static void* writer(void *ignored)
+static void* writer(void *arg)
 {
-    (void) ignored;
+    counter_t *c = (counter_t *) arg;
 
-    (void) pthread_rwlock_wrlock(&rwlock);
-    count++;
-    (void) pthread_rwlock_unlock(&rwlock);
+    (void) pthread_rwlock_wrlock(&c->rwlock);
+    c->counter++;
+    (void) pthread_rwlock_unlock(&c->rwlock);
     return NULL;
 }
 
 int main(int argc, char *argv[])
 {
     pthread_t tids[2*argc];
+    counter_t cnter = { .counter = 0, .rwlock = PTHREAD_RWLOCK_INITIALIZER };
     (void) argv;
 
     for (int i = 1; i < argc; i++) {
-        (void) pthread_create(&tids[2*i], NULL, reader, NULL);
-        (void) pthread_create(&tids[2*i+1], NULL, writer, NULL);
+        (void) pthread_create(&tids[2*i], NULL, reader, &cnter);
+        (void) pthread_create(&tids[2*i+1], NULL, writer, &cnter);
     }
     for (int i = 1; i < argc; i++) {
         (void) pthread_join(tids[2*i], NULL);

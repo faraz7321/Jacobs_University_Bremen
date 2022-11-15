@@ -9,46 +9,48 @@
 
 #include <pthread.h>
 
-static unsigned int count = 0;          /* shared variable */
-static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+typedef struct {
+    unsigned int counter;       /* shared counter */
+    pthread_mutex_t mutex;      /* mutex protecting the counter */
+    pthread_cond_t cond;        /* condition variable */
+} counter_t;
 
-static void* even(void *ignored)
+static void* even(void *arg)
 {
-    (void) ignored;
-    
-    (void) pthread_mutex_lock(&mutex);
-    while (count % 2 != 0) {
-        (void) pthread_cond_wait(&cond, &mutex);
+    counter_t *c = (counter_t *) arg;
+    (void) pthread_mutex_lock(&c->mutex);
+    while (c->counter % 2 != 0) {
+        (void) pthread_cond_wait(&c->cond, &c->mutex);
     }
-    count++;
-    (void) pthread_mutex_unlock(&mutex);
-    (void) pthread_cond_signal(&cond);
+    c->counter++;
+    (void) pthread_mutex_unlock(&c->mutex);
+    (void) pthread_cond_signal(&c->cond);
     return NULL;
 }
 
-static void* odd(void *ignored)
+static void* odd(void *arg)
 {
-    (void) ignored;
-
-    (void) pthread_mutex_lock(&mutex);
-    while (count % 2 == 0) {
-        (void) pthread_cond_wait(&cond, &mutex);
+    counter_t *c = (counter_t *) arg;
+    (void) pthread_mutex_lock(&c->mutex);
+    while (c->counter % 2 == 0) {
+        (void) pthread_cond_wait(&c->cond, &c->mutex);
     }
-    count++;
-    (void) pthread_mutex_unlock(&mutex);
-    (void) pthread_cond_signal(&cond);
+    c->counter++;
+    (void) pthread_mutex_unlock(&c->mutex);
+    (void) pthread_cond_signal(&c->cond);
     return NULL;
 }
 
 int main(int argc, char *argv[])
 {
     pthread_t tids[2*argc];
+    counter_t cnter = { .counter = 0, .mutex = PTHREAD_MUTEX_INITIALIZER,
+                        .cond = PTHREAD_COND_INITIALIZER };
     (void) argv;
     
     for (int i = 1; i < argc; i++) {
-        (void) pthread_create(&tids[2*i], NULL, even, NULL);
-        (void) pthread_create(&tids[2*i+1], NULL, odd, NULL);
+        (void) pthread_create(&tids[2*i], NULL, even, &cnter);
+        (void) pthread_create(&tids[2*i+1], NULL, odd, &cnter);
     }
     for (int i = 1; i < argc; i++) {
         (void) pthread_join(tids[2*i], NULL);
