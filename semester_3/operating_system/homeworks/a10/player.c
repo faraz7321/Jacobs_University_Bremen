@@ -104,7 +104,7 @@ int player_post_challenge(player_t *p, char *in, char **out)
         p->state = FINISHED;
         rc = asprintf(out, "M: You mastered %d/%d challenges. Good bye!\r\n",
                       p->solved, p->total);
-        exit(0);
+        return rc;
     }
 
     if (strncmp(in, "R: ", 3) != 0)
