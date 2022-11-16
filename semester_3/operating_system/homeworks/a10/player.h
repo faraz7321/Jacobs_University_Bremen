@@ -8,18 +8,21 @@
 #include <stdbool.h>
 #include "chlng.h"
 
-#define PLAYER_STATE_NEW 0x00      /* new player */
-#define PLAYER_STATE_WRONG 0x01    /* last guess was wrong */
-#define PLAYER_STATE_GUESSED 0x02  /* last guess was correct */
-#define PLAYER_STATE_CONTINUE 0x04 /* continue with another guess */
-#define PLAYER_STATE_FINISHED 0x08 /* player finished the game */
+enum PLAYER_STATE
+{
+    NEW = 0,
+    WRONG = 1,
+    GUESSED = 2,
+    CONTINUE = 4,
+    FINISHED = 8
+};
 
 typedef struct player
 {
-    int state;      /* state of the player */
-    int solved;     /* correctly solved challenges */
-    int total;      /* total number of challenges */
-    bool finished;  /* true if we are done */
+    int state;  /* current state of the player */
+    int solved; /* correctly solved challenges */
+    int total;  /* total number of challenges */
+    // bool finished;  /* true if we are done */
     chlng_t *chlng; /* current challenge */
 } player_t;
 

@@ -40,6 +40,7 @@ static void game_thread(int fd);
 
 int main(int argc, char *argv[])
 {
+    // signal(SIGINT, sig_handler);
     void (*gameType)(int) = game_block;
     int opt, ignore[] = {SIGPIPE, SIGCHLD, 0};
     listen_t *iface, interfaces[] = {
@@ -152,12 +153,12 @@ static int gwg(int fd)
         free(msg);
     }
 
-    while (!(p->state & PLAYER_STATE_FINISHED))
+    while (p->state != FINISHED)
     {
         char *msg = NULL;
         char line[1024];
 
-        if (!(p->state & PLAYER_STATE_CONTINUE))
+        if (p->state != CONTINUE)
         {
             player_fetch_chlng(p);
         }
@@ -169,11 +170,16 @@ static int gwg(int fd)
             tcp_write(fd, msg, rc);
             free(msg);
         }
+        else
+        {
+            perror("player_get_challenge");
+        }
 
         rc = tcp_read(fd, line, 1024);
         // socket closed
         if (rc <= 0)
         {
+            perror("socket closed");
             break;
         }
 
@@ -182,6 +188,10 @@ static int gwg(int fd)
         {
             tcp_write(fd, msg, rc);
             free(msg);
+        }
+        else
+        {
+            perror("player_post_challenge");
         }
     }
 
@@ -245,9 +255,6 @@ static void game_thread(int fd)
     {
         return;
     }
-
-    /* Casting the file descriptor into a pointer value is a hack. */
-
     rc = pthread_create(&tid, NULL, game_thread_go, (void *)(long)cfd);
     if (rc != 0)
     {

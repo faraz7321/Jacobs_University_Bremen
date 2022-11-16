@@ -11,7 +11,6 @@
 #include <ctype.h>
 #include <sys/types.h>
 #include <assert.h>
-
 #include "chlng.h"
 
 static char *readall(int fd)
@@ -114,7 +113,6 @@ int chlng_fetch_text(chlng_t *c)
     c->text = readall(fds[0]);
     if (c->text)
     {
-        /* trim any trailing non-printable characters */
         for (int i = strlen(c->text) - 1; i >= 0; i--)
         {
             if (!isprint(c->text[i]))
@@ -127,7 +125,6 @@ int chlng_fetch_text(chlng_t *c)
     close(fds[0]);
     if (strchr(c->text, '\n'))
     {
-        /* we prefer to have short sentences without newlines */
         return chlng_fetch_text(c);
     }
     return 0;
@@ -140,8 +137,6 @@ int chlng_hide_word(chlng_t *c)
     int words = 0;
 
     assert(c);
-
-    /* First count the number of words. */
 
     for (p = c->text, inword = 0; *p; p++)
     {
@@ -166,8 +161,6 @@ int chlng_hide_word(chlng_t *c)
         words++;
     }
 
-    /* Pick a random word number. */
-
     int divisor = RAND_MAX / (words);
     int retval;
 
@@ -175,8 +168,6 @@ int chlng_hide_word(chlng_t *c)
     {
         retval = rand() / divisor;
     } while (retval > words);
-
-    /* Find the random word we picked. */
 
     for (p = c->text, inword = 0, words = 0; *p; p++)
     {
@@ -201,8 +192,6 @@ int chlng_hide_word(chlng_t *c)
             }
         }
     }
-
-    /* Copy the word, modify the text. */
 
     c->word = strdup(found);
     for (p = found, q = c->word; isalpha(*p); p++, q++)
