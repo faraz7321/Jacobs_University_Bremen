@@ -11,6 +11,7 @@
 #include <ctype.h>
 #include <sys/types.h>
 #include <assert.h>
+
 #include "chlng.h"
 
 static char *readall(int fd)
@@ -78,39 +79,57 @@ void chlng_del(chlng_t *c)
 
 int chlng_fetch_text(chlng_t *c)
 {
-    pid_t id;
-    int fd[2];
-    char *buffer = (char *)malloc(1024);
+    pid_t pid;
+    int fds[2];
 
-    // create unidirectional pipe
-    if (pipe(fd) < 0)
+    assert(c);
+    chlng_reset(c);
+
+    if (pipe(fds) == -1)
     {
-        perror("pipe();");
-        exit(EXIT_FAILURE);
+        perror("pipe");
+        return -1;
     }
 
-    id = fork();
-
-    if (id < 0)
+    pid = fork();
+    if (pid < 0)
     {
-        perror("fork();");
-        exit(EXIT_FAILURE);
+        perror("fork");
+        (void)close(fds[0]);
+        (void)close(fds[1]);
+        return -2;
     }
-    else if (id == 0)
+
+    if (pid == 0)
     {
-        close(fd[0]);
-        dup2(fd[1], 1);
+        dup2(fds[1], STDOUT_FILENO);
+        (void)close(fds[0]);
+        (void)close(fds[1]);
         execlp("fortune", "fortune", "-s", NULL);
-        perror("exec");
-        exit(EXIT_FAILURE);
+        perror("execlp");
+        _exit(EXIT_FAILURE);
     }
-    else
+
+    close(fds[1]);
+    c->text = readall(fds[0]);
+    if (c->text)
     {
-        close(fd[1]);
-        read(fd[0], buffer, 1024);
-        close(fd[0]);
+        /* trim any trailing non-printable characters */
+        for (int i = strlen(c->text) - 1; i >= 0; i--)
+        {
+            if (!isprint(c->text[i]))
+            {
+                c->text[i] = 0;
+            }
+            break;
+        }
     }
-    printf("%s", buffer);
+    close(fds[0]);
+    if (strchr(c->text, '\n'))
+    {
+        /* we prefer to have short sentences without newlines */
+        return chlng_fetch_text(c);
+    }
     return 0;
 }
 
