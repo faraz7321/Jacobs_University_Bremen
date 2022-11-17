@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdint.h>
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -19,10 +20,6 @@
 #include <pthread.h>
 
 #include "tcp.h"
-
-#define CFDS_SIZE 1024
-int cfds[CFDS_SIZE];
-int no_clients = 0;
 
 typedef struct {
     char *address;
@@ -35,66 +32,32 @@ static void usage(FILE *stream, int status)
     exit(status);
 }
 
-static void echo_block(int fd)
+static void echo_loop(int cfd)
 {
-    int rc, cfd;
+    int rc;
 
-    cfd = tcp_accept(fd);
-    if (cfd == -1) {
-	return;
-    }
-    
     do {
         rc = tcp_read_write(cfd, cfd);
     } while (rc > 0);
     (void) close(cfd);
 }
 
-static void echo_event(int fd)
+static void echo_event(int cfd)
 {
-    int cfd;
-
-    cfd = tcp_accept(fd);
-    if (cfd == -1) {
-	return;
-    }
-
-    if (no_clients+1 < CFDS_SIZE) {
-        cfds[no_clients++] = cfd;
-    } else {
-        close(cfd);
-    }
+    (void) cfd;
 }
 
-static void echo_fork(int fd)
+static void echo_fork(int cfd)
 {
-    int rc, cfd;
+    pid_t pid;
 
-    /*
-     * Note that we let the parent process accept the new connection.
-     * If we let the child process do this, then we can run into the
-     * situation that the parent's subsequent select may see the
-     * socket as still readable (in case the forked client did not yet
-     * run to accept from the socket) and then the parent may fork yet
-     * another child process.
-     */
-
-    cfd = tcp_accept(fd);
-    if (cfd == -1) {
-        return;
-    }
-
-    rc = fork();
-    if (rc == -1) {
+    pid = fork();
+    if (pid == -1) {
         perror("fork");
         return;
     }
-    if (rc == 0) {
-        (void) close(fd);               /* Not needed by the child. */
-        do {
-            rc = tcp_read_write(cfd, cfd);
-        } while (rc > 0);
-        (void) close(cfd);
+    if (pid == 0) {
+        echo_loop(cfd);
         exit(EXIT_SUCCESS);
     }
     (void) close(cfd);                  /* Not needed by the parent. */
@@ -102,36 +65,105 @@ static void echo_fork(int fd)
 
 static void* echo_thread_go(void *arg)
 {
-    int rc, cfd = (long) arg;
+    int cfd = (intptr_t) arg;
 
-    do {
-        rc = tcp_read_write(cfd, cfd);
-    } while (rc > 0);
-    (void) close(cfd);    
+    echo_loop(cfd);
     return NULL;
 }
 
-static void echo_thread(int fd)
+static void echo_thread(int cfd)
 {
-    int rc, cfd;
+    int rc;
     pthread_t tid;
     
-    cfd = tcp_accept(fd);
-    if (cfd == -1) {
-        return;
-    }
-
-    /* Casting the file descriptor into a pointer value is a hack. */
-
-    rc = pthread_create(&tid, NULL, echo_thread_go, (void *) (long) cfd);
+    rc = pthread_create(&tid, NULL, echo_thread_go, (void *) (intptr_t) cfd);
     if (rc != 0) {
-        fprintf(stderr, "pthread_create failed\n");
+        (void) fprintf(stderr, "pthread_create failed\n");
+    }
+}
+
+static void mainloop(listen_t *listeners, void (*echo)(int))
+{
+#define CFDS_SIZE 1024
+    int cfds[CFDS_SIZE];        /* client file descriptors (event-driven) */
+    int no_clients = 0;         /* number of entries of cfds in use */
+    
+    /*
+     * The main event loop starts here. We continue until there is no
+     * file descriptor left we are waiting on.
+     */
+
+    while (1) {
+        fd_set fdset;
+        FD_ZERO(&fdset);
+        int maxfd = 0;
+        for (listen_t *l = listeners; l->address; l++) {
+            if (l->fd > 0) {
+                FD_SET(l->fd, &fdset);
+                maxfd = (l->fd > maxfd) ? l->fd : maxfd;
+            }
+        }
+        if (echo == echo_event) {
+            for (int i = 0; i < no_clients; i++) {
+                FD_SET(cfds[i], &fdset);
+                maxfd = (cfds[i] > maxfd) ? cfds[i] : maxfd;
+            }
+        }
+        if (maxfd == 0) {
+            break;
+        }
+        if (select(1 + maxfd, &fdset, NULL, NULL, NULL) == -1) {
+            perror("select");
+            exit(EXIT_FAILURE);
+	}
+        for (listen_t *l = listeners; l->address; l++) {
+            if (l->fd > 0 && FD_ISSET(l->fd, &fdset)) {                
+                /*
+                 * Note that we let the parent process / main thread
+                 * accept the new connection.  If we let the child
+                 * process / thread do this, then we can run into the
+                 * situation that the subsequent select may see the
+                 * socket as still readable (in case the process /
+                 * thread did not yet run to accept from the socket)
+                 * and then the main loop may create yet another child
+                 * process / thread.
+                 */
+                int cfd = tcp_accept(l->fd);
+                if (cfd == -1) {
+                    perror("accept");
+                } else {
+                    if (echo == echo_event) {
+                        if (no_clients+1 < CFDS_SIZE) {
+                            cfds[no_clients++] = cfd;
+                        } else {
+                            fprintf(stderr, "too many clients\n");
+                            close(cfd);
+                        }
+                    } else {
+                        echo(cfd);
+                    }
+                }
+            }
+        }
+        if (echo == echo_event) {
+            for (int i = 0; i < no_clients; i++) {
+                if (FD_ISSET(cfds[i], &fdset)) {
+                    int rc = tcp_read_write(cfds[i], cfds[i]);
+                    if (rc == 0) {
+                        close(cfds[i]);
+                        memmove(cfds+i, cfds+(i+1),
+                                (no_clients-i) * sizeof(int));
+                        no_clients--;
+                    }
+                }
+            }
+        }
     }
 }
 
 int main(int argc, char *argv[])
 {
-    void (*echo)(int) = echo_block;
+    void (*echo)(int) = echo_loop;
     int opt, ignore[] = { SIGPIPE, SIGCHLD, 0 };
     listen_t *iface, interfaces[] = {
         { .address = "0.0.0.0" },               /* IPv4 any address */
@@ -148,7 +180,7 @@ int main(int argc, char *argv[])
             echo = echo_fork;
             break;
         case 's':
-            echo = echo_block;
+            echo = echo_loop;
             break;
         case 't':
             echo = echo_thread;
@@ -177,66 +209,20 @@ int main(int argc, char *argv[])
     }
 
     /*
-     * Create listening sockets for the interfaces we want to
+     * Create listening sockets for the transport addresses we want to
      * listen on.
      */
 
     for (iface = interfaces; iface->address; iface++) {
         iface->fd = tcp_listen(iface->address, argv[optind]);
         if (iface->fd == -1) {
-            fprintf(stderr, "listening on %s port %s failed\n",
-                    iface->address, argv[optind]);
+            (void) fprintf(stderr, "listening on %s port %s failed\n",
+                           iface->address, argv[optind]);
 	    continue;
 	}
     }
 
-    /*
-     * The main event loop starts here. We continue until there is no
-     * listening file descriptor left.
-     */
-
-    while (1) {
-        fd_set fdset;
-        FD_ZERO(&fdset);
-        int maxfd = 0;
-        for (iface = interfaces; iface->address; iface++) {
-            if (iface->fd > 0) {
-                FD_SET(iface->fd, &fdset);
-                maxfd = (iface->fd > maxfd) ? iface->fd : maxfd;
-            }
-        }
-        if (echo == echo_event) {
-            for (int i = 0; i < no_clients; i++) {
-                FD_SET(cfds[i], &fdset);
-                maxfd = (cfds[i] > maxfd) ? cfds[i] : maxfd;
-            }
-        }
-        if (maxfd == 0) {
-            break;
-        }
-        if (select(1 + maxfd, &fdset, NULL, NULL, NULL) == -1) {
-            perror("select");
-            return EXIT_FAILURE;
-	}
-        for (iface = interfaces; iface->address; iface++) {
-            if (iface->fd > 0 && FD_ISSET(iface->fd, &fdset)) {                
-                echo(iface->fd);
-            }
-        }
-        if (echo == echo_event) {
-            for (int i = 0; i < no_clients; i++) {
-                if (FD_ISSET(cfds[i], &fdset)) {
-                    int rc = tcp_read_write(cfds[i], cfds[i]);
-                    if (rc == 0) {
-                        close(cfds[i]);
-                        memmove(cfds+i, cfds+(i+1),
-                                (no_clients-i) * sizeof(int));
-                        no_clients--;
-                    }
-                }
-            }
-        }
-    }
+    mainloop(interfaces, echo);
     
     return EXIT_SUCCESS;
 }

@@ -53,16 +53,6 @@ are only interested in specific sample programs.
 
   A demonstration how to intercept library calls at dynamic link time.
 
-* daytime
-
-  Simple TCP and UDP clients retrieving the current date and time from
-  a daytime server.
-
-* daytimed
-
-  Simple TCP, UDP and joint TCP/UDP servers providing access to the
-  current date and time.
-
 * echo
 
   Implementations of the echo utility (sequential, concurrent
@@ -226,6 +216,12 @@ are only interested in specific sample programs.
 
   Implementation of the classic snake terminal game. Demonstrates the
   usage of curses (or ncurses).
+
+* sockets
+
+  Implementation of a tiny sockets wrapper API plus a chat daemon and
+  a chat client. Additional examples demonstrate different ways to
+  architect a simple servers (threading, forking, event-driven).
 
 * syncbox
 
