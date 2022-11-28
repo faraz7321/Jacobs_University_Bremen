@@ -5,7 +5,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 project(HELLO)
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 11)
@@ -40,6 +40,7 @@ add_executable(hello-atexit hello-atexit.c)
 add_executable(hello-snowman hello-snowman.c)
 add_executable(hello-gettext hello-gettext.c)
 add_executable(hello-cpp hello-cpp.cc)
+# add_executable(hello-🌐 hello-🌐.c)
 
 add_executable(hello-dll hello-dll.c)
 target_link_libraries(hello-dll "-ldl")
