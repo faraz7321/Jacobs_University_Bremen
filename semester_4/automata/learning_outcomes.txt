@@ -1,0 +1,11 @@
+- explain discrete automata models (finite state machines, pushdown automata, Turing machines);
+- describe the Chomsky hierarchy of formal languages and classify formal languages;
+- characterize classes of formal languages by automata models and grammars;
+- define formal models of computation (Turing machines, random access machines, recursive functions, lambda calculus);
+- explain the equivalences of formal models of computation;
+- illustrate the nature and impact of the Church-Turing hypothesis;
+- construct diagonalization arguments;
+- name examples of functions that are not computable;
+- contrast central complexity classes (L, P, NP, EXP, …);
+- apply reduction techniques both for decidability and complexity;
+- create a reduction-based check on whether a problem is NP-complete.
