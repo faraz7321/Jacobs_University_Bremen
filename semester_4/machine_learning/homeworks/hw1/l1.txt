@@ -1,0 +1,15 @@
+1 Discrete random variables
+	We condsider the chance experiment of rolling two fair dices.
+
+	Give the sample space Ω.
+	Formally give the event the sum of the thrown values is four.
+	Introduce the random variable X of the sum of the thrown values.
+	Give the PMF p of X.
+	Compute the mean of X.
+	
+2 Continuous random variables
+	Let X be a uniformly distributed RV X ~U[-1,1].
+
+	Give its density.
+	Give its CDF and plot it.
+	Compute its mean.
