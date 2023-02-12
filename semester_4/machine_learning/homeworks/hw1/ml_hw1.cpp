@@ -1,19 +1,13 @@
 #include <iostream>
-using namespace std;
-using namespace Eigen;
-#ifdef __linux__
 
+#ifdef __linux__
 #include <eigen3/Eigen/Eigen>
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/LU>
-#elif __WIN32__
-##include<Eigen/Eigen>
-#include <Eigen/Dense>
-#include <Eigen/LU>
-#else
-//idk
 #endif
 
+using namespace std;
+using namespace Eigen;
 int main()
 {
 
