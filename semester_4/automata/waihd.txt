@@ -1,1 +1,0 @@
-this accepts language with ends 0 or empty string. any string we read is 0 before we get into accepted state.

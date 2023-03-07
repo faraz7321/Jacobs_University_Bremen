@@ -1,5 +1,0 @@
-Here is a counter example.
-It is evident at the given example that the greedy aproach will not work.
-The ideal path in the example is 7 3 8 7 5. If we take the greedy aproach, 
-which takes the maxiumum value that is available at the time, the path 
-becomes 7 8 1 7 5, which has a total value of 28.

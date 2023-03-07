@@ -1,7 +1,0 @@
-# Rules file for the echo device driver
-#
-# Copy this file into /etc/udev/rules.d so that udev can create
-# a suitable character device in /dev.
-#
-
-KERNEL=="echo0", SUBSYSTEM=="echo", MODE="0664", GROUP="schoenw"

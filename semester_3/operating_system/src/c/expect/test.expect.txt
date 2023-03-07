@@ -1,4 +1,0 @@
-expect Name
-send ftp
-send ftp
-send quit
