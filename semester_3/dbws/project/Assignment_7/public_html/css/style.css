@@ -1,0 +1,150 @@
+body{
+    background-color: blanchedalmond;
+    font-family: sans-serif, serif;
+}
+
+/* div{
+    background-color: black;
+} */
+
+input[type=text], input[type=password]{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;;
+}
+
+input[type=submit]{
+    background-color: cadetblue;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100px;
+    margin-left: 400px;
+    padding: auto;
+}
+
+input[type=submit]:hover{
+    /* opacity: 0.5; */
+    background-color: rgb(5, 92, 63);
+}
+
+
+div.form{
+    width: 500px;
+    margin: 100px auto auto auto;
+    /* border-style: solid;
+    border-color: burlywood;
+    border-width: 1px; */
+}
+
+
+div.sidebar{
+    height: 100%;
+    width: 165px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: burlywood;
+    overflow-x: hidden;
+    padding-top: 150px;
+}
+
+div.sidebar a{
+    padding: 15px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: grey;
+    display: block;
+}
+
+
+div.sidebar a:hover, #current{
+    color: white;
+    /* text-decoration: underline; */
+}
+
+/* div.sidebar a:visited{
+    color: white;
+    text-decoration: underline;
+} */
+
+#imprint{
+    text-align: center;
+    padding-left: 170px;
+    /* padding-top: 300px; */
+    position: absolute;
+    bottom: 0;
+    color:burlywood;
+}
+
+h1.home, h1.about{
+    text-align: center;
+    color: burlywood;
+}
+
+/* h1.about{
+    text-align: center;
+    color: burlywood;
+} */
+
+h2.about{
+    text-align: center;
+    text-decoration: underline;
+}
+
+p.intro{
+    margin: 15px 200px;
+}
+
+h4.about{
+    margin:0px 200px;
+    height:10px;
+}
+
+div.page{
+    margin-top: 120px;
+}
+
+
+.topbar{
+    background-color: brown;
+    overflow: hidden;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 60px;
+    width: 1855px;
+}
+  
+.topbar a{
+    float: right;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 20px 16px;
+    text-decoration: none;
+    font-size: 20px;
+}
+  
+.topbar a:hover{
+    background-color: #ddd;
+    color: black;
+}
+
+
+.sidebar img{
+    float: left;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 165px;
+    height: 60px;
+    background: #555;
+}
+
+
