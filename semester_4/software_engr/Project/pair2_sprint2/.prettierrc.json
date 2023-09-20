@@ -1,0 +1,12 @@
+{
+    "plugins": [
+        "prettier-plugin-organize-imports",
+        "prettier-plugin-tailwindcss"
+    ],
+    "semi": false,
+    "singleQuote": true,
+    "arrowParens": "avoid",
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "organizeImportsSkipDestructiveCodeActions": true
+}

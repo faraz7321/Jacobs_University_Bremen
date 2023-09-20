@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Home - Bug World</title>
+
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <h1 class="py-4 text-center text-4xl font-bold">Home!</h1>
+
+        <div class="p-4">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-5">
+                <div
+                    class="relative col-span-1 border-4 p-2 md:col-span-3"
+                    id="game-field"
+                ></div>
+                <div class="col-span-1 md:col-span-2">
+                    <a href="options.html">
+                        <div class="btn btn-blue">Options</div>
+                    </a>
+                    <a href="quit.html">
+                        <div class="btn btn-red mt-2">Quit</div>
+                    </a>
+
+                    <div class="mt-4">
+                        <div class="text-xl font-semibold">
+                            Iterations: <span id="current-iteration">0</span> /
+                            <span id="max-iteration"> 100</span>
+                        </div>
+                        <div class="text-xl font-semibold">
+                            Amount of undetected food:
+                            <span id="undetected-food">0</span>
+                        </div>
+                        <div class="text-xl font-semibold">
+                            Red bugs remaining:
+                            <span id="bug-team-1-alive">0</span>
+                        </div>
+                        <div class="text-xl font-semibold">
+                            Red Bugs killed: <span id="bug-team-1-dead">0</span>
+                        </div>
+                        <div class="text-xl font-semibold">
+                            Food brought home for red bugs:
+                            <span id="bug-team-1-food">0</span>
+                        </div>
+                        <div class="text-xl font-semibold">
+                            Black bugs remaining:
+                            <span id="bug-team-2-alive">0</span>
+                        </div>
+                        <div class="text-xl font-semibold">
+                            Black bugs killed:
+                            <span id="bug-team-2-dead">0</span>
+                        </div>
+                        <div class="text-xl font-semibold">
+                            Food brought home for black bugs:
+                            <span id="bug-team-2-food">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="mt-4 text-left text-2xl font-bold">Logs</h2>
+            <div class="mt-2 flex items-center gap-2">
+                <div>
+                    <label>Switch logs</label>
+                    <input type="checkbox" id="log-switch" />
+                </div>
+                <button class="btn btn-red" id="clear-logs-button">
+                    Clear logs
+                </button>
+            </div>
+
+            <div
+                class="mt-4 max-h-96 overflow-y-scroll border-2 border-red-600 p-2"
+                id="logs"
+                style="display: none"
+            ></div>
+        </div>
+
+        <script src="bundle.js"></script>
+    </body>
+</html>

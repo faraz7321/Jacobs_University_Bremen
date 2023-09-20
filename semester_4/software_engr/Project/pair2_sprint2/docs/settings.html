@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Settings - Bug World</title>
+
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <h1 class="py-4 text-center text-4xl font-bold">Bug World</h1>
+
+        <div class="p-4">
+            <div>
+                <div class="text-lg font-semibold">
+                    Please upload a world map file:
+                </div>
+                <input type="file" id="world-map-file" name="world-map-file" />
+            </div>
+
+            <div class="mt-2">
+                <div class="text-lg font-semibold">
+                    Please upload a bug assembler source code file #1
+                </div>
+                <input
+                    type="file"
+                    id="bug-team-1-file"
+                    name="bug-team-1-file"
+                />
+            </div>
+
+            <div class="mt-2">
+                <div class="text-lg font-semibold">
+                    Please upload a bug assembler source code file #2
+                </div>
+                <input
+                    type="file"
+                    id="bug-team-2-file"
+                    name="bug-team-2-file"
+                />
+            </div>
+
+            <div class="mt-2">
+                <div class="text-lg font-semibold">
+                    Please select the number of iterations:
+                </div>
+                <select
+                    name="iterations-select"
+                    id="iterations-select"
+                    class="select max-w-xs"
+                >
+                    <option value="100" selected="selected">100</option>
+                    <option value="200">200</option>
+                    <option value="300">300</option>
+                    <option value="400">400</option>
+                    <option value="500">500</option>
+                </select>
+            </div>
+            <div class="mt-2">
+                <div class="text-lg font-semibold">
+                    Do you want to log the results of the session?
+                </div>
+                <input
+                    type="checkbox"
+                    id="log-results-checkbox"
+                    name="log-results-checkbox"
+                />
+            </div>
+        </div>
+
+        <div class="w-100 flex justify-center">
+            <a href="home.html">
+                <button class="btn btn-blue" id="finish-setup-button">
+                    Next
+                </button>
+            </a>
+        </div>
+
+        <script src="bundle.js"></script>
+    </body>
+</html>

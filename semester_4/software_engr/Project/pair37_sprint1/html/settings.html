@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <link
+      href="http://fonts.googleapis.com/css?family=Didact+Gothic"
+      rel="stylesheet"
+    />
+    <link
+      href="../css/style.css"
+      rel="stylesheet"
+      type="text/css"
+      media="all"
+    />
+  </head>
+
+  <body>
+    <div id="header-wrapper">
+      <div id="header" class="container">
+        <div id="logo">
+          <h1><a href="index.html">Bug World</a></h1>
+        </div>
+        <div id="menu">
+          <ul>
+            <li class="active">
+              <a href="index.html" accesskey="1" title="">Home</a>
+            </li>
+
+            <li><a href="#" accesskey="2" title="">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div
+        id="three-column"
+        class="container"
+        style="
+          background-color: rgb(255, 255, 255);
+          position: absolute;
+          left: 0px;
+          width: 1000px;
+          padding: 10px;
+        "
+      >
+        <form>
+          <label for="file">Please upload a world map file:</label>
+          <input
+            type="file"
+            id="file1"
+            name="file1"
+            style="margin-left: 400px"
+          />
+          <button type="button" onclick="process()" class="button2">
+            Upload
+          </button>
+          <br />
+          <label for="file"
+            >Please upload a bug assembler source code file #1:</label
+          >
+          <input type="file" id="file" name="file" style="margin-left: 263px" />
+          <button type="button" onclick="process()" class="button2">
+            Upload
+          </button>
+          <br />
+          <label for="file"
+            >Please upload a bug assembler source code file #2:</label
+          >
+          <input type="file" id="file" name="file" style="margin-left: 261px" />
+          <button type="button" onclick="process()" class="button2">
+            Upload
+          </button>
+        </form>
+        <p>
+          Please select the number of iterations:
+          <select id="select" style="margin-left: 350px"></select>
+        </p>
+        <label>
+          Do you want to log the results of the session?
+          <input type="checkbox" name="agree" style="margin-left: 305px" />
+        </label>
+        <br />
+        <button class="button2" onclick="window.location.href = 'home.html';">
+          Next
+        </button>
+      </div>
+      <script src="../js/index.js"></script>
+      <div id="extra"></div>
+    </div>
+  </body>
+</html>

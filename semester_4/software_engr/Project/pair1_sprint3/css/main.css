@@ -1,0 +1,187 @@
+body {
+  background-color: #f0e3d3;
+  color: #745c4c;
+  font-family: sans-serif;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+p {
+  font-size: 1rem;
+}
+
+#welcome-box, #game-end-box, #quit-box, #settings-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.circle-letter {
+  background-color: #a67c52;
+  color: #f0e3d3;
+  border-radius: 50%;
+  padding: 0.5rem 1rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+  transition: all 0.5s ease;
+  cursor: pointer;
+}
+
+.circle-letter:hover {
+  background-color: #745c4c;
+}
+
+.btn-start {
+  background-color: #745c4c;
+  color: #f0e3d3;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.5rem 1.5rem;
+  font-size: 2rem;
+  transition: background-color 0.2s ease;
+  transition: all 0.5s ease;
+}
+
+.btn-start:hover {
+  background-color: #a67c52;
+}
+
+#options-screen, #game-screen, #settings-screen {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-screen {
+    align-items: start;
+}
+
+#options-card, #quit-card, #settings-card {
+    background-color: #fff;
+    max-width: 50rem;
+    width: 100%;
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+#quit-card {
+    max-width: 30rem;
+}
+
+.action-icon {
+    background: none;
+    border: none;
+    border-radius: 50%;
+    transition: all 0.5s ease;
+}
+
+.action-icon:hover {
+    background-color: #745c4c60;
+}
+
+#game-field {
+  border: 2px solid #745c4c;
+  width: 100%;
+  height: 500px;
+  background-color: white;
+}
+
+.hex-cell {
+  border: 1px solid black;
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.hex-cell img {
+  max-width: 60%;
+  height: auto;
+}
+
+.hex-row {
+  display: flex;
+}
+
+#session-logs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: white;
+}
+
+.log {
+  border: 1px solid;
+  padding: 10px;
+}
+
+.log span {
+  font-weight: bold;
+  color: 'royalblue';
+}
+
+.hex-cell.obstacle-cell {
+  background-color: 'gray';
+}
+
+.hex-cell.empty-cell {
+  background-color: 'white';
+}
+
+.team-1-nest {
+  background-color: 'red';
+}
+
+.team-2-nest {
+  background-color: 'black';
+}
+
+.food-cell-1 {
+  background-color: 'green';
+}
+
+.food-cell-2 {
+  background-color: 'green';
+}
+
+.food-cell-3 {
+  background-color: 'green';
+}
+
+.food-cell-4 {
+  background-color: 'green';
+}
+
+.food-cell-5 {
+  background-color: 'green';
+}
+
+.food-cell-6 {
+  background-color: 'green';
+}
+
+.food-cell-7 {
+  background-color: 'green';
+}
+
+.food-cell-8 {
+  background-color: 'green';
+}
+
+.food-cell-9 {
+  background-color: 'green';
+}

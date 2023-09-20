@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bug World</title>
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
+    <section>
+      <div class="bugimage">
+        <img src="../images/bg.png" alt="bug world simulator" />
+      </div>
+      <div class="playoptions">
+        <input
+          type="button"
+          value="Options"
+          onclick="window.location.href = 'options.html';"
+        />
+        <input type="button" value="Quit" onclick="quitWarning()" />
+        <script>
+          function quitWarning() {
+            if (confirm("Do you really want to quit?")) {
+              window.location.href = "index.html";
+            }
+          }
+        </script>
+      </div>
+    </section>
+    <script src="../js/index.js"></script>
+  </body>
+</html>

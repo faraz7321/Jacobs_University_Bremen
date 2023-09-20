@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Options - Bug World</title>
+
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <h1 class="py-4 text-center text-4xl font-bold">Options</h1>
+
+        <div class="p-4">
+            <div>
+                <div class="text-lg font-semibold">Change bugs' color #1:</div>
+                <select
+                    name="bug-team-1-color-select"
+                    class="select max-w-xs"
+                    id="bug-team-1-color-select"
+                >
+                    <option value="red">Red</option>
+                    <option value="black">Black</option>
+                </select>
+            </div>
+            <div>
+                <div class="text-lg font-semibold">Change bugs' color #2:</div>
+                <select
+                    name="bug-team-2-color-select"
+                    class="select max-w-xs"
+                    id="bug-team-2-color-select"
+                >
+                    <option value="red">Red</option>
+                    <option value="black">Black</option>
+                </select>
+            </div>
+            <div>
+                <div class="text-lg font-semibold">Number of iterations:</div>
+                <select
+                    name="iterations-select"
+                    class="select max-w-xs"
+                    id="iterations-select"
+                >
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="300">300</option>
+                    <option value="400">400</option>
+                    <option value="500">500</option>
+                </select>
+            </div>
+            <div>
+                <div class="text-lg font-semibold">
+                    The duration of a tick in seconds:
+                </div>
+                <input
+                    class="select max-w-xs"
+                    type="number"
+                    id="fps-select"
+                    name="fps-select"
+                    min="1"
+                    max="100"
+                    value="10"
+                />
+            </div>
+        </div>
+
+        <div class="w-100 flex justify-center">
+            <a href="home.html">
+                <button class="btn btn-blue" id="go-back-button">
+                    Go back
+                </button>
+            </a>
+        </div>
+
+        <script src="bundle.js"></script>
+    </body>
+</html>

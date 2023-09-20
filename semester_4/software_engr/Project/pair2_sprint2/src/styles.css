@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+    @apply rounded px-4 py-2 font-bold;
+}
+.btn-blue {
+    @apply bg-blue-500 text-white;
+}
+.btn-blue:hover {
+    @apply bg-blue-700;
+}
+
+.btn-red {
+    @apply bg-red-500 text-white;
+}
+
+.btn-red:hover {
+    @apply bg-red-700;
+}
+
+.select {
+    @apply block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500;
+}
+
+.cell {
+    @apply border-4 border-black;
+}
+
+.obstacle {
+    /* gray */
+    @apply bg-gray-400;
+}
+
+.empty {
+    @apply bg-white;
+}
+
+.black-nest {
+    @apply bg-black;
+}
+
+.red-nest {
+    @apply bg-red-500;
+}
+
+.food {
+    @apply bg-green-500;
+}
+
+.log {
+    @apply border-b-2 border-dashed;
+}
