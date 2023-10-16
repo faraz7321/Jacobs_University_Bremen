@@ -9,9 +9,6 @@
 #define F_CPU 16000000UL
 #include <avr/interrupt.h>
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
-
 void ADC_init()
 {
 	// Set reference voltage to AVCC
