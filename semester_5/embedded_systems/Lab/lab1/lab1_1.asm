@@ -1,6 +1,5 @@
 ;lab1
-;uses CALL/RCALL    
-    
+;code without CALL/RCALL
     .org 0x0000
     rjmp start  ; Jump to the start of the program
 
@@ -13,12 +12,7 @@ main_loop:
     com r16         ; Complement the bits
     out 0x0B, r16   ; Write the toggled state back to PORTD
     
-    call delay_1s   ; Call the 1-second delay subroutine
-    
-    rjmp main_loop  ; Repeat the loop
-
-; Delay subroutine (assuming 16 MHz clock)
-delay_1s:
+    ; Inline delay for 1 second (assuming 16 MHz clock)
     ldi r18, 78     ; Outer loop counter (adjusted for 16 MHz)
 outer_loop:
     ldi r19, 250   ; Inner loop counter
@@ -28,4 +22,4 @@ inner_loop:
     dec r18
     brne outer_loop
     
-    ret            ; Return to the caller
+    rjmp main_loop  ; Repeat the loop
