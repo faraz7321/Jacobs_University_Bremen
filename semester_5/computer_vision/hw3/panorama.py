@@ -35,7 +35,30 @@ def harris_corners(img, window_size=3, k=0.04):
     dy = filters.sobel_h(img)
 
     ### YOUR CODE HERE
-    pass
+    # Square of derivatives
+    dx2 = dx * dx
+    dy2 = dy * dy
+    dxy = dx * dy
+
+    # Sum of squared derivatives over the window
+    Sdx2 = convolve(dx2, window)
+    Sdy2 = convolve(dy2, window)
+    Sdxy = convolve(dxy, window)
+
+    # Harris corner calculation for each pixel
+    for i in range(H):
+        for j in range(W):
+            # Constructing the matrix M for each pixel
+            M = np.array([[Sdx2[i, j], Sdxy[i, j]],
+                          [Sdxy[i, j], Sdy2[i, j]]])
+
+            # Compute the determinant and trace of M
+            det = np.linalg.det(M)
+            trace = np.trace(M)
+
+            # Compute the response R
+            R = det - k * (trace ** 2)
+            response[i, j] = R
     ### END YOUR CODE
 
     return response
@@ -61,7 +84,15 @@ def simple_descriptor(patch):
     """
     feature = []
     ### YOUR CODE HERE
-    pass
+    mean = patch.mean()
+    std = patch.std()
+
+    # If the standard deviation is zero, use 1 instead.
+    if std == 0:
+        std = 1
+
+    # Normalize the patch and then flatten it.
+    feature = ((patch - mean) / std).flatten()
     ### END YOUR CODE
     return feature
 
@@ -114,10 +145,22 @@ def match_descriptors(desc1, desc2, threshold=0.5):
     dists = cdist(desc1, desc2)
 
     ### YOUR CODE HERE
-    pass
+
+    # Iterate over all descriptors in desc1
+    for i, distances in enumerate(dists):
+        # Sort the distances
+        sorted_indices = np.argsort(distances)
+        # Get the indices of the closest and second-closest match
+        closest, second_closest = sorted_indices[:2]
+
+        # Perform the ratio test
+        if distances[closest] / distances[second_closest] < threshold:
+            # Add the match to the list if the ratio test is passed
+            matches.append([i, closest])
+
     ### END YOUR CODE
 
-    return matches
+    return np.array(matches)
 
 
 def fit_affine_matrix(p1, p2):
@@ -140,7 +183,7 @@ def fit_affine_matrix(p1, p2):
     p2 = pad(p2)
 
     ### YOUR CODE HERE
-    pass
+    H, _, _, _ = np.linalg.lstsq(p2, p1, rcond=None)
     ### END YOUR CODE
 
     # Sometimes numerical issues cause least-squares to produce the last
@@ -187,7 +230,29 @@ def ransac(keypoints1, keypoints2, matches, n_iters=200, threshold=20):
 
     # RANSAC iteration start
     ### YOUR CODE HERE
-    pass
+    for _ in range(n_iters):
+
+        # 1. Select random set of matches
+        i = np.random.choice(N, n_samples, replace=False)
+        s1, s2 = matched1[i], matched2[i]
+        
+        # 2. Compute affine transformation matrix
+        
+        #H = fit_affine_matrix(s1, s2)
+        H = np.linalg.lstsq(s2, s1, rcond=None)[0]
+        H[:,2] = np.array([0, 0, 1])
+
+        # 3. Find inliers using the given threshold
+        curr_inliers = np.sqrt(((matched2.dot(H) - matched1) ** 2).sum(axis=-1)) < threshold
+        curr_n_inliers = curr_inliers.sum()
+        if curr_n_inliers > n_inliers:
+            max_inliers = curr_inliers
+            n_inliers = curr_n_inliers
+
+    #H = fit_affine_matrix(matched1[max_inliers], matched2[max_inliers])
+    H = np.linalg.lstsq(matched2[max_inliers], matched1[max_inliers], rcond=None)[0]
+    H[:,2] = np.array([0, 0, 1])
+    
     ### END YOUR CODE
     print(H)
     return H, orig_matches[max_inliers]
@@ -239,7 +304,24 @@ def hog_descriptor(patch, pixels_per_cell=(8,8)):
 
     # Compute histogram per cell
     ### YOUR CODE HERE
-    pass
+
+    # Divide image into cells, and calculate histogram 
+    # of gradients in each cell
+    lb = ((theta_cells // degrees_per_bin - (theta_cells % degrees_per_bin <= degrees_per_bin / 2)) % n_bins).astype(int)
+    ub = ((lb + 1) % n_bins).astype(int)
+    lower_weights = ((degrees_per_bin / 2 - theta_cells % degrees_per_bin) % degrees_per_bin) / degrees_per_bin
+    upper_weights = 1 - lower_weights
+    indices = np.indices((rows, cols, pixels_per_cell[0], pixels_per_cell[1]))
+    i, j = indices[0].reshape(-1), indices[1].reshape(-1)
+
+    # Flatten block of histograms into feature vector
+    np.add.at(cells, (i, j, lb.reshape(-1)), (lower_weights * G_cells).reshape(-1))
+    np.add.at(cells, (i, j, ub.reshape(-1)), (upper_weights * G_cells).reshape(-1))
+    
+    #Normalize flattened block
+    block = cells.reshape(-1)
+    block /= np.linalg.norm(block)
+
     ### YOUR CODE HERE
 
     return block
@@ -275,7 +357,21 @@ def linear_blend(img1_warped, img2_warped):
     left_margin = np.argmax(img2_mask[out_H//2, :].reshape(1, out_W), 1)[0]
 
     ### YOUR CODE HERE
-    pass
+
+    #Define a weight matrices for img1_warped and img2_warped
+    weight1 = np.ones_like(img1_warped)
+    weight2 = np.ones_like(img2_warped)
+
+    #Apply the weight matrices to their corresponding images
+    if left_margin < right_margin:
+        n = right_margin - left_margin + 1
+        weight1[:,left_margin:right_margin + 1] = np.linspace(1, 0, n)
+        weight2[:,left_margin:right_margin + 1] = np.linspace(0, 1, n)
+    
+    # Combine the images
+    merged = weight1 * img1_warped + weight2 * img2_warped   
+    overlap = img1_mask + img2_mask
+    merged /= np.maximum(overlap, 1)
     ### END YOUR CODE
 
     return merged
@@ -316,7 +412,35 @@ def stitch_multiple_images(imgs, desc_func=simple_descriptor, patch_size=5):
         matches.append(mtchs)
 
     ### YOUR CODE HERE
-    pass
+
+    # # Initialize the list of transformation matrices
+    # ones on the diagonal and zeros elsewhere
+    Matrix = [np.eye(3)] 
+
+    # Compute transformations from each image to the first image using RANSAC
+    for i in range(len(imgs) - 1):
+        Matrix.append(ransac(keypoints[i], keypoints[i + 1], matches[i], threshold=1)[0])
+    
+    for i in range(1, len(imgs)):
+        Matrix[i] = Matrix[i].dot(Matrix[i - 1])
+    
+    # Calculate the size and offset of the final panorama canvas
+    output_shape, offset = get_output_space(imgs[0], imgs[1:], Matrix[1:])
+    warped_images = []
+    
+    # Warp all images to the panorama canvas
+    for i in range(len(imgs)):
+        warped_images.append(warp_image(imgs[i], Matrix[i], output_shape, offset))
+        img_mask = (warped_images[-1] != -1)
+        warped_images[-1][~img_mask] = 0
+    
+    # Initialize the panorama with the first image already placed
+    panorama = warped_images[0]
+    
+    # Blend the images into the panorama
+    for i in range(1, len(imgs)):
+        panorama = linear_blend(panorama, warped_images[i])
+
     ### END YOUR CODE
 
     return panorama
