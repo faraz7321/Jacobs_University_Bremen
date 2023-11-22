@@ -1,17 +1,23 @@
+# JTMS-14
+# a12_p1.py
+# Faraz Ahmad
+# fahmad@jacobs-university.de
+
 from graphics import *
 
 def main():
 	win = GraphWin()
-	shape = Circle(Point(50, 50), 20)
-	shape.setOutline("red")
-	shape.setFill("red")
-	shape.draw(win)
+	size = 20
+	
 	for i in range(10):
 		p = win.getMouse()
-		c = shape.getCenter()
-		dx = p.getX() - c.getX()
-		dy = p.getY() - c.getY()
-		shape.move(dx, dy)
+		shape = Rectangle(Point(p.getX() - size, p.getY() - size), \
+					Point(p.getX() + size, p.getY() + size))
+		
+		shape.setOutline("red")
+		shape.setFill("red")
+		shape.draw(win)
+	
 	win.close()
 
 main()
