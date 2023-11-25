@@ -30,11 +30,16 @@ class PCA(object):
         self.mean = None   # empirical mean, has shape (D,)
         X_centered = None  # zero-centered data
 
-        # YOUR CODE HERE
         # 1. Compute the mean and store it in self.mean
-        # 2. Apply either method to `X_centered`
-        pass
-        # END YOUR CODE
+        self.mean = np.mean(X, axis=0)
+        
+        # 2. Apply either method to `X_centered`      
+        X_centered = X - self.mean
+        
+        if method == 'svd':
+            self.W_pca = self._svd(X_centered)[0]
+        elif method == 'eigen_decomp':
+            self.W_pca = self._eigen_decomp(X_centered)[0]
 
         # Make sure that X_centered has mean zero
         assert np.allclose(X_centered.mean(), 0.0)
@@ -66,13 +71,17 @@ class PCA(object):
         N, D = X.shape
         e_vecs = None
         e_vals = None
-        # YOUR CODE HERE
         # Steps:
         #     1. compute the covariance matrix of X, of shape (D, D)
+        X_cov = np.cov(X.T)
+                
         #     2. compute the eigenvalues and eigenvectors of the covariance matrix
-        #     3. Sort both of them in decreasing order (ex: 1.0 > 0.5 > 0.0 > -0.2 > -1.2)
-        pass
-        # END YOUR CODE
+        e_vals, e_vecs = np.linalg.eig(X_cov)
+        
+        #     3. Sort both of them in decreasing order (ex: 1.0 > 0.5 > 0.0 > -0.2 > -1.2)        
+        idx = np.argsort(e_vals)[::-1]
+        e_vals = e_vals[idx]
+        e_vecs = e_vecs[:, idx]
 
         # Check the output shapes
         assert e_vals.shape == (D,)
@@ -93,11 +102,13 @@ class PCA(object):
         vecs = None  # shape (D, D)
         N, D = X.shape
         vals = None  # shape (K,)
-        # YOUR CODE HERE
+        
         # Here, compute the SVD of X
         # Make sure to return vecs as the matrix of vectors where each column is a singular vector
-        pass
-        # END YOUR CODE
+        # Perform Singular Value Decomposition
+        __, vals, vecs = np.linalg.svd(X)
+        vecs = vecs.T
+
         assert vecs.shape == (D, D)
         K = min(N, D)
         assert vals.shape == (K,)
@@ -116,12 +127,13 @@ class PCA(object):
         """
         N, _ = X.shape
         X_proj = None
-        # YOUR CODE HERE
+        
         # We need to modify X in two steps:
         #     1. first substract the mean stored during `fit`
+        tmp = X - self.mean
+        
         #     2. then project onto a subspace of dimension `n_components` using `self.W_pca`
-        pass
-        # END YOUR CODE
+        X_proj = np.dot(tmp, self.W_pca[:, :n_components])
 
         assert X_proj.shape == (N, n_components), "X_proj doesn't have the right shape"
 
@@ -142,12 +154,12 @@ class PCA(object):
         N, n_components = X_proj.shape
         X = None
 
-        # YOUR CODE HERE
         # Steps:
         #     1. project back onto the original space of dimension D
+        
+        orig = np.dot(X_proj, self.W_pca[:, :n_components].T) 
         #     2. add the mean that we substracted in `transform`
-        pass
-        # END YOUR CODE
+        X = orig + self.mean 
 
         return X
 
@@ -181,13 +193,13 @@ class LDA(object):
 
         e_vecs = None
 
-        # YOUR CODE HERE
         # Solve generalized eigenvalue problem for matrices `scatter_between` and `scatter_within`
         # Use `scipy.linalg.eig` instead of numpy's eigenvalue solver.
         # Don't forget to sort the values and vectors in descending order.
-        pass
-        # END YOUR CODE
-
+        
+        e_vals, e_vecs = scipy.linalg.eig(scatter_between, scatter_within)
+        e_vecs = e_vecs[:, np.argsort(-e_vals)]
+        
         self.W_lda = e_vecs
 
         # Check that the shape of `self.W_lda` is correct
@@ -220,11 +232,14 @@ class LDA(object):
         scatter_within = np.zeros((D, D))
 
         for i in np.unique(y):
-            # YOUR CODE HERE
             # Get the covariance matrix for class i, and add it to scatter_within
-            pass
-            # END YOUR CODE
-
+            
+            X_i = X[y == i] # matrix of examples with labels i
+            X_i_mean = np.mean(X_i, axis=0)
+            X_centered = X_i - X_i_mean
+            S_i = X_centered.T.dot(X_centered) # covariance matrix of X_i
+            scatter_within += S_i
+            
         return scatter_within
 
     def _between_class_scatter(self, X, y):
@@ -247,9 +262,11 @@ class LDA(object):
 
         mu = X.mean(axis=0)
         for i in np.unique(y):
-            # YOUR CODE HERE
-            pass
-            # END YOUR CODE
+            
+            X_i = X[y == i] # matrix of examples with labels i
+            N_eg = X_i.shape[0]
+            mu_i = np.mean(X_i, axis=0) #mean of X_i
+            scatter_between += N_eg * (mu_i - mu).T.dot(mu_i - mu)
 
         return scatter_between
 
@@ -265,10 +282,9 @@ class LDA(object):
         """
         N, _ = X.shape
         X_proj = None
-        # YOUR CODE HERE
+        
         # project onto a subspace of dimension `n_components` using `self.W_lda`
-        pass
-        # END YOUR CODE
+        X_proj = X.dot(self.W_lda[:, :n_components])
 
         assert X_proj.shape == (N, n_components), "X_proj doesn't have the right shape"
 
