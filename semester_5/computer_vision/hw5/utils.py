@@ -9,8 +9,9 @@ import os
 
 def load_frames(imgs_dir):
     frames = [img_as_float(imread(os.path.join(imgs_dir, frame), 
-                                               as_grey=True)) \
-              for frame in sorted(os.listdir(imgs_dir))]
+                                               as_gray=True)) \
+              for frame in sorted(os.listdir(imgs_dir))]    # changed: as_grey --> as_gray
+
     return frames
 
 def load_bboxes(gt_path):
