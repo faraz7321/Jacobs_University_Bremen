@@ -39,8 +39,31 @@ def lucas_kanade(img1, img2, keypoints, window_size=5):
         # locations can be computed using bilinear interpolation.
         y, x = int(round(y)), int(round(x))
 
-        ### YOUR CODE HERE
-        pass
+        # window for Ix, Iy, and It
+        Ix_w = Ix[y-w:y+w+1, x-w:x+w+1]
+        Iy_w = Iy[y-w:y+w+1, x-w:x+w+1]
+        It_w = It[y-w:y+w+1, x-w:x+w+1]
+
+        # Flatten the window matrices
+        Ix_w = Ix_w.flatten()
+        Iy_w = Iy_w.flatten()
+        It_w = -It_w.flatten()
+
+        # Construct A and b matrices
+        A_matrix = np.vstack((Ix_w, Iy_w)).T
+        b = It_w
+
+        # Compute flow vector using least squares: v = inv(A.T * A) A.T * b
+        At_A = A_matrix.T @ A_matrix
+        At_b = A_matrix.T @ b
+
+        # At_A is invertible?
+        if np.linalg.det(At_A) != 0:
+            v = np.linalg.inv(At_A) @ At_b
+            flow_vectors.append(v)
+        else:
+            # assign a zero flow
+            flow_vectors.append(np.array([0, 0]))
         ### END YOUR CODE
 
     flow_vectors = np.array(flow_vectors)
@@ -79,15 +102,18 @@ def iterative_lucas_kanade(img1, img2, keypoints,
     # Compute spatial gradients
     Iy, Ix = np.gradient(img1)
 
+    height, width = img1.shape[:2]
     for y, x, gy, gx in np.hstack((keypoints, g)):
         v = np.zeros(2) # Initialize flow vector as zero vector
         y1 = int(round(y)); x1 = int(round(x))
 
 
-        # TODO: Compute inverse of G at point (x1, y1)
-        ### YOUR CODE HERE
-        pass
-        ### END YOUR CODE
+        # Compute inverse of G at point (x1, y1)
+        A1 = Ix[y1-w: y1+w+1, x1-w: x1+w+1]
+        A2 = Iy[y1-w: y1+w+1, x1-w: x1+w+1]
+        G = np.array([[np.sum(A1**2), np.sum(A1*A2)],
+                      [np.sum(A1*A2), np.sum(A2**2)]])
+        G_inv = np.linalg.inv(G)
 
         # iteratively update flow vector
         for k in range(num_iters):
@@ -95,10 +121,18 @@ def iterative_lucas_kanade(img1, img2, keypoints,
             # Refined position of the point in the next frame
             y2 = int(round(y+gy+vy)); x2 = int(round(x+gx+vx))
 
-            # TODO: Compute bk and vk = inv(G) x bk
-            ### YOUR CODE HERE
-            pass
-            ### END YOUR CODE
+            # Compute bk and vk = inv(G) x bk
+            if 0 <= y2 < height and 0 <= x2 < width:
+                delta_Ik = img1[y1, x1] - img2[y2, x2]
+            else:
+                continue
+            delta_x = delta_Ik * np.sum(Ix[y1 - w:y1 + w + 1,
+                                           x1 - w:x1 + w + 1])
+            
+            delta_y = delta_Ik * np.sum(Iy[y1 - w:y1 + w + 1,
+                                           x1 - w:x1 + w + 1])
+            bk = np.array([delta_x, delta_y])
+            vk = G_inv.dot(bk)
 
             # Update flow vector by vk
             v += vk
@@ -137,10 +171,12 @@ def pyramid_lucas_kanade(img1, img2, keypoints,
     g = np.zeros(keypoints.shape)
 
     for L in range(level, -1, -1):
-        ### YOUR CODE HERE
-        pass
-        ### END YOUR CODE
-
+        scaled_keypoints = keypoints / (scale ** L)
+        d = iterative_lucas_kanade(pyramid1[L], pyramid2[L], scaled_keypoints,
+                               window_size=window_size, num_iters=num_iters, g=g)
+        #last iter
+        g = scale * (g + d)
+    
     d = g + d
     return d
 
@@ -158,9 +194,14 @@ def compute_error(patch1, patch2):
     """
     assert patch1.shape == patch2.shape, 'Differnt patch shapes'
     error = 0
-    ### YOUR CODE HERE
-    pass
-    ### END YOUR CODE
+    
+    # Normalize patches
+    norm_patch1 = (patch1 - patch1.min()) / (patch1.max() - patch1.min())
+    norm_patch2 = (patch2 - patch2.min()) / (patch2.max() - patch2.min())
+
+    # Compute mean squared error
+    error = np.mean((norm_patch1 - norm_patch2) ** 2)
+
     return error
 
 def track_features(frames, keypoints,
@@ -239,9 +280,24 @@ def IoU(bbox1, bbox2):
     x2, y2, w2, h2 = bbox2
     score = 0
 
-    ### YOUR CODE HERE
-    pass
-    ### END YOUR CODE
+    # Calculate the (x, y) coordinates of the intersection rectangle
+    xi1 = max(x1, x2)
+    yi1 = max(y1, y2)
+    xi2 = min(x1 + w1, x2 + w2)
+    yi2 = min(y1 + h1, y2 + h2)
+
+    # Calculate area of intersection rectangle
+    inter_area = max(0, xi2 - xi1) * max(0, yi2 - yi1)
+
+    # Calculate the areas of the individual bounding boxes
+    area1 = w1 * h1
+    area2 = w2 * h2
+
+    # Calculate the area of union
+    union_area = area1 + area2 - inter_area
+
+    # Calculate IoU
+    score = inter_area / union_area if union_area > 0 else 0
 
     return score
 
